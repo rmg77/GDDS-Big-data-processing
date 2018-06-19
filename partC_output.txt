@@ -1,0 +1,312 @@
+Ralph Michael Gailis
+28838750
+Spark context Web UI available at http://10.27.162.201:4041
+Spark context available as 'sc' (master = local[*], app id = local-1529367023444).
+Spark session available as 'spark'.
+Welcome to
+      ____              __
+     / __/__  ___ _____/ /__
+    _\ \/ _ \/ _ `/ __/  '_/
+   /___/ .__/\_,_/_/ /_/\_\   version 2.2.1
+      /_/
+         
+Using Scala version 2.11.8 (OpenJDK 64-Bit Server VM, Java 1.8.0_171)
+Type in expressions to have them evaluated.
+Type :help for more information.
+
+scala> 
+
+scala> // Assessment 4 - Part C
+
+scala> 
+
+scala> import org.apache.spark.sql.expressions._
+import org.apache.spark.sql.expressions._
+
+scala> import org.apache.spark.sql.types.{StructType, StructField, StringType,
+     |     IntegerType, LongType}
+import org.apache.spark.sql.types.{StructType, StructField, StringType, IntegerType, LongType}
+
+scala> import org.apache.spark.rdd.RDD
+import org.apache.spark.rdd.RDD
+
+scala> //import org.apache.spark.mllib.util.MLUtils
+
+scala> import org.apache.spark.ml.regression.LinearRegression
+import org.apache.spark.ml.regression.LinearRegression
+
+scala> import org.apache.spark.ml.feature.VectorAssembler
+import org.apache.spark.ml.feature.VectorAssembler
+
+scala> import org.apache.spark.ml.linalg.Vectors
+import org.apache.spark.ml.linalg.Vectors
+
+scala> import org.apache.spark.ml.feature.StringIndexer
+import org.apache.spark.ml.feature.StringIndexer
+
+scala> import org.apache.spark.ml.Pipeline
+import org.apache.spark.ml.Pipeline
+
+scala> 
+
+scala> // adjusting the log level to only errors (ignore warnings)
+
+scala> sc.setLogLevel("error")
+
+scala> 
+
+scala> val customSchema = StructType(Array(
+     |     StructField("DayOfMonth", IntegerType, true),
+     |     StructField("DayOfWeek", IntegerType, true),
+     |     StructField("CarrierCode", StringType, true),
+     |     StructField("TailNum", StringType, true),
+     |     StructField("FlightNum", StringType, true),
+     |     StructField("OriginAirportID", LongType, true),
+     |     StructField("OriginAirport", StringType, true),
+     |     StructField("DestinationAirportID", LongType, true),
+     |     StructField("DestinationAirport", StringType, true),
+     |     StructField("ScheduledDepartureTime", StringType, true),
+     |     StructField("ActualDepartureTime", StringType, true),
+     |     StructField("DepartureDelay", IntegerType, true),
+     |     StructField("ScheduledArrivalTime", StringType, true),
+     |     StructField("ActualArrivalTime", StringType, true),
+     |     StructField("ArrivalDelay", StringType, true),
+     |     StructField("ElapsedTime", IntegerType, true),
+     |     StructField("Distance", IntegerType, true)
+     | ))
+customSchema: org.apache.spark.sql.types.StructType = StructType(StructField(DayOfMonth,IntegerType,true), StructField(DayOfWeek,IntegerType,true), StructField(CarrierCode,StringType,true), StructField(TailNum,StringType,true), StructField(FlightNum,StringType,true), StructField(OriginAirportID,LongType,true), StructField(OriginAirport,StringType,true), StructField(DestinationAirportID,LongType,true), StructField(DestinationAirport,StringType,true), StructField(ScheduledDepartureTime,StringType,true), StructField(ActualDepartureTime,StringType,true), StructField(DepartureDelay,IntegerType,true), StructField(ScheduledArrivalTime,StringType,true), StructField(ActualArrivalTime,StringType,true), StructField(ArrivalDelay,StringType,true), StructField(ElapsedTime,IntegerType,true), StructFie...
+scala>     
+     | val df = spark.read.schema(customSchema).csv("test.csv.bz2")
+df: org.apache.spark.sql.DataFrame = [DayOfMonth: int, DayOfWeek: int ... 15 more fields]
+
+scala> df.printSchema()
+root
+ |-- DayOfMonth: integer (nullable = true)
+ |-- DayOfWeek: integer (nullable = true)
+ |-- CarrierCode: string (nullable = true)
+ |-- TailNum: string (nullable = true)
+ |-- FlightNum: string (nullable = true)
+ |-- OriginAirportID: long (nullable = true)
+ |-- OriginAirport: string (nullable = true)
+ |-- DestinationAirportID: long (nullable = true)
+ |-- DestinationAirport: string (nullable = true)
+ |-- ScheduledDepartureTime: string (nullable = true)
+ |-- ActualDepartureTime: string (nullable = true)
+ |-- DepartureDelay: integer (nullable = true)
+ |-- ScheduledArrivalTime: string (nullable = true)
+ |-- ActualArrivalTime: string (nullable = true)
+ |-- ArrivalDelay: string (nullable = true)
+ |-- ElapsedTime: integer (nullable = true)
+ |-- Distance: integer (nullable = true)
+
+
+scala> 
+
+scala> /************************/
+     | // Q1 - Sort the flights based on their flight number and scheduled
+     | //  departure time
+     | val sortedDF = df.orderBy("FlightNum", "ScheduledDepartureTime")
+sortedDF: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [DayOfMonth: int, DayOfWeek: int ... 15 more fields]
+
+scala> 
+
+scala> // Transform categorical columns to indices for regression
+
+scala> // Code snippet from
+
+scala> //  http://apache-spark-user-list.1001560.n3.nabble.com/StringIndexer-on-several-co lumns-in-a-DataFrame-with-Scala-td29842.html
+
+scala> val categoricalCol = Array("CarrierCode", "FlightNum", "OriginAirportID",
+     |     "DestinationAirportID", "ScheduledDepartureTime")
+categoricalCol: Array[String] = Array(CarrierCode, FlightNum, OriginAirportID, DestinationAirportID, ScheduledDepartureTime)
+
+scala> val indexers = categoricalCol.map { colName =>
+     |   new StringIndexer().setInputCol(colName).setOutputCol(colName + "_indexed")
+     | }
+indexers: Array[org.apache.spark.ml.feature.StringIndexer] = Array(strIdx_bec02324f515, strIdx_dae316a4256b, strIdx_6d6e27b66e1c, strIdx_1b11fd862d02, strIdx_abb0d226fe24)
+
+scala> 
+
+scala> // Apply indexers to training data
+
+scala> val pipeline = new Pipeline().setStages(indexers)      
+pipeline: org.apache.spark.ml.Pipeline = pipeline_2247df3f18c2
+
+scala> val indexedDF = pipeline.fit(sortedDF).transform(sortedDF)
+indexedDF: org.apache.spark.sql.DataFrame = [DayOfMonth: int, DayOfWeek: int ... 20 more fields]
+
+scala> // we will be accessing the dataframe multiple times so persist in memory
+
+scala> indexedDF.persist()
+res6: indexedDF.type = [DayOfMonth: int, DayOfWeek: int ... 20 more fields]
+
+scala> 
+
+scala> // Assemble the feature vector based on selected attributes
+
+scala> val assembler = new VectorAssembler().
+     |     setInputCols(Array("DayOfMonth", "DayOfWeek", "CarrierCode_indexed",
+     |     "FlightNum_indexed", "OriginAirportID_indexed",
+     |     "DestinationAirportID_indexed", "ScheduledDepartureTime_indexed")).
+     |     setOutputCol("features")
+assembler: org.apache.spark.ml.feature.VectorAssembler = vecAssembler_2c5e700c5dde
+
+scala> 
+
+scala> // Perform transform to insert feature vector and add a label column
+
+scala> val finalDF = assembler.transform(indexedDF).
+     |   withColumn("label", indexedDF("ArrivalDelay") - indexedDF("DepartureDelay")).
+     |   select("label", "features")
+finalDF: org.apache.spark.sql.DataFrame = [label: double, features: vector]
+
+scala> finalDF.persist()
+res7: finalDF.type = [label: double, features: vector]
+
+scala> finalDF.take(10).foreach(println)
+[0.0,[1.0,3.0,8.0,175.0,18.0,23.0,422.0]]
+[-1.0,[4.0,6.0,8.0,175.0,18.0,23.0,422.0]]
+[35.0,[5.0,7.0,8.0,175.0,18.0,23.0,422.0]]
+[32.0,[2.0,4.0,8.0,175.0,18.0,23.0,422.0]]
+[15.0,[9.0,4.0,8.0,175.0,18.0,23.0,655.0]]
+[14.0,[8.0,3.0,8.0,175.0,18.0,23.0,655.0]]
+[-1.0,[10.0,5.0,8.0,175.0,18.0,23.0,655.0]]
+[49.0,[11.0,6.0,8.0,175.0,18.0,23.0,655.0]]
+[0.0,[13.0,1.0,8.0,175.0,18.0,23.0,655.0]]
+[8.0,[16.0,4.0,8.0,175.0,18.0,23.0,655.0]]
+
+scala> 
+
+scala> /**************************/
+     | // Q2 - Split into train-test dataframes
+     | // We now have a regression-ready dataset.
+     | // Filtering code for splitting dataframe adapted from:
+     | //  https://stackoverflow.com/questions/46991818/reduce-size-of-spark-dataframe-by- selecting-only-every-n-th-element-with-scala
+     | val n = 10
+n: Int = 10
+
+scala> val testDF = finalDF.withColumn("index", row_number().  // add an index column
+     |     over(Window.orderBy(monotonically_increasing_id))).
+     |     filter($"index" % n === 0).       // filter modulo n to select only those rows
+     |     drop("index")                     // now drop index column again
+testDF: org.apache.spark.sql.DataFrame = [label: double, features: vector]
+
+scala>     
+     | val trainDF = finalDF.except(testDF) // training data is the remainder
+trainDF: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [label: double, features: vector]
+
+scala> println("Total DF size = " + finalDF.count)
+Total DF size = 439620
+
+scala> println("Train DF size = " + trainDF.count)
+Train DF size = 395658
+
+scala> println("Test DF size = " + testDF.count)
+Test DF size = 43962
+
+scala> 
+
+scala> /**************************/
+     | // Q3 - Train a linear regression to model the training dataset and predict
+     | // the overall delay. Code adapted from
+     | //  https://spark.apache.org/docs/latest/ml-classification-regression.html#linear-r egression
+     | val lr = new LinearRegression().
+     |     setMaxIter(10).
+     |     // these parameters need to be zero to undertake "normal" solver
+     |     setRegParam(0). 
+     |     setElasticNetParam(0).  // normal solver is required for p-values
+     |     setFeaturesCol("features").
+     |     setLabelCol("label").
+     |     setPredictionCol("prediction")
+lr: org.apache.spark.ml.regression.LinearRegression = linReg_ac060bdb7003
+
+scala> // For a discussion of solvers and requirements for extracting p-values, see
+
+scala> //  https://stackoverflow.com/questions/46696378/spark-linearregressionsummary-norm al-summary
+
+scala> 
+
+scala> // Fit the model
+
+scala> val lrModel = lr.fit(trainDF)
+lrModel: org.apache.spark.ml.regression.LinearRegressionModel = linReg_ac060bdb7003
+
+scala> 
+
+scala> // Print the coefficients and intercept for linear regression
+
+scala> println(s"Coefficients: ${lrModel.coefficients}")
+Coefficients: [-0.04027672904347547,0.012779972639228488,0.30823913054898494,4.908247440947317E-4,0.008952971643635253,6.484692267252148E-4,-0.001220993048124057]
+
+scala> println(s"Intercept: ${lrModel.intercept}")
+Intercept: -0.9771726681847341
+
+scala> 
+
+scala> /**************************/
+     | // Q4 - Calculate and report train and test error (RMSE)
+     | val lrPrediction = lrModel.transform(testDF)
+lrPrediction: org.apache.spark.sql.DataFrame = [label: double, features: vector ... 1 more field]
+
+scala> 
+
+scala> // Calculate residuals of model prediction vs data
+
+scala> val residuals = lrPrediction.select("label", "prediction").
+     |     // calculate difference of data label and prediction
+     |     withColumn("diff", lrPrediction("label") - lrPrediction("prediction")).
+     |     // extract value from row
+     |     select("diff").rdd.map(r => r(0).toString.toDouble).collect()
+residuals: Array[Double] = Array(7.642355232436113, 20.178732682640522, 2.1222329535111824, -20.396383109092902, 1.9955410198284143, 1.1728503717934298, 52.01807618872836, -1.644993195158821, -1.2186027705713989, -2.5164728618945427, -2.062585680902874, -3.0803470685031997, 0.9457623597720113, 1.537133322784915, -2.409626226542159, -1.95573904555049, -1.5913116730334211, -6.413596566687517, 0.04029061430415137, 0.4322147432254674, -5.345996568245311, 1.0734243170802522, 1.472317985263427, 5.594122735744825, -10.068946648142353, -10.049974080106132, 3.3419500488151836, 18.795837229806853, -5.755348115250161, 1.1604329891745981, 0.3519570847621869, -2.6593646209366892, -2.2949372484196195, -7.84105006742795, 0.9889766830282949, -0.6465959444546359, -4.298303955113041, 0.1830799822828746, ...
+scala> val n = residuals.length
+n: Int = 43962
+
+scala> 
+
+scala> // Calculate the root mean square error of the model
+
+scala> val testRMSE = math.sqrt(
+     |     residuals.map( x => math.pow(x, 2) ).reduceLeft(_+_) / n
+     | )
+testRMSE: Double = 738.9907458886242
+
+scala> 
+
+scala> // Print model error results
+
+scala> val trainingSummary = lrModel.summary
+trainingSummary: org.apache.spark.ml.regression.LinearRegressionTrainingSummary = org.apache.spark.ml.regression.LinearRegressionTrainingSummary@2d0ae88a
+
+scala> println(s"Training RMSE = ${trainingSummary.rootMeanSquaredError}")
+Training RMSE = 11.193164505095746
+
+scala> println(s"Training r2 = ${trainingSummary.r2}")
+Training r2 = 0.01306784813291395
+
+scala> println("Test RMSE = " + testRMSE)
+Test RMSE = 738.9907458886242
+
+scala> 
+
+scala> /**************************/
+     | // Q5 - Identify the most and least contributing attributes in the training set.
+     | // This is done by examining p-values and t-statistics
+     | println("p-values: ")
+p-values: 
+
+scala> trainingSummary.pValues
+res33: Array[Double] = Array(0.0, 0.17229346879720597, 0.0, 0.0, 0.0, 0.11799713130056455, 0.0, 0.0)
+
+scala> println("t-statistics: ")
+t-statistics: 
+
+scala> trainingSummary.tValues
+res35: Array[Double] = Array(-20.050089803860924, 1.3648738813808945, 54.33540404745644, 39.35176325552377, 21.552454463309, 1.563239249153961, -14.98806135910698, -15.131999088242166)
+
+scala> // See a discussion of these values in the assessment report
+
+scala> 
+
+scala> // end!
+
+scala> :quit

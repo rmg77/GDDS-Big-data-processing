@@ -1,0 +1,371 @@
+Ralph Michael Gailis
+28838750
+Spark context Web UI available at http://10.27.162.201:4041
+Spark context available as 'sc' (master = local[*], app id = local-1529280780995).
+Spark session available as 'spark'.
+Welcome to
+      ____              __
+     / __/__  ___ _____/ /__
+    _\ \/ _ \/ _ `/ __/  '_/
+   /___/ .__/\_,_/_/ /_/\_\   version 2.2.1
+      /_/
+         
+Using Scala version 2.11.8 (OpenJDK 64-Bit Server VM, Java 1.8.0_171)
+Type in expressions to have them evaluated.
+Type :help for more information.
+
+scala> 
+
+scala> // start!
+
+scala> import org.apache.spark.sql.types.{StructType, StructField, StringType, I ntegerType, LongType}
+import org.apache.spark.sql.types.{StructType, StructField, StringType, IntegerType, LongType}
+
+scala> import org.apache.spark.graphx._
+import org.apache.spark.graphx._
+
+scala> import org.apache.spark.rdd.RDD
+import org.apache.spark.rdd.RDD
+
+scala> import java.io._
+import java.io._
+
+scala> 
+
+scala> // file name stub to use to write files to
+
+scala> val path = "28838750_"
+path: String = 28838750_
+
+scala> 
+
+scala> // adjusting the log level to only errors (ignore warnings)
+
+scala> sc.setLogLevel("error") 
+
+scala> 
+
+scala> // schema definition modelled on code at https://github.com/databricks/sp ark-csv
+
+scala> val customSchema = StructType(Array(
+     |     StructField("DayOfMonth", IntegerType, true),
+     |     StructField("DayOfWeek", IntegerType, true),
+     |     StructField("CarrierCode", StringType, true),
+     |     StructField("TailNum", StringType, true),
+     |     StructField("FlightNum", StringType, true),
+     |     StructField("OriginAirportID", LongType, true),
+     |     StructField("OriginAirport", StringType, true),
+     |     StructField("DestinationAirportID", LongType, true),
+     |     StructField("DestinationAirport", StringType, true),
+     |     StructField("ScheduledDepartureTime", StringType, true),
+     |     StructField("ActualDepartureTime", StringType, true),
+     |     StructField("DepartureDelay", IntegerType, true),
+     |     StructField("ScheduledArrivalTime", StringType, true),
+     |     StructField("ActualArrivalTime", StringType, true),
+     |     StructField("ArrivalDelay", StringType, true),
+     |     StructField("ElapsedTime", IntegerType, true),
+     |     StructField("Distance", IntegerType, true)
+     | ))
+customSchema: org.apache.spark.sql.types.StructType = StructType(StructField(DayOfMonth,IntegerType,true), StructField(DayOfWeek,IntegerType,true), StructField(CarrierCode,StringType,true), StructField(TailNum,StringType,true), StructField(FlightNum,StringType,true), StructField(OriginAirportID,LongType,true), StructField(OriginAirport,StringType,true), StructField(DestinationAirportID,LongType,true), StructField(DestinationAirport,StringType,true), StructField(ScheduledDepartureTime,StringType,true), StructField(ActualDepartureTime,StringType,true), StructField(DepartureDelay,IntegerType,true), StructField(ScheduledArrivalTime,StringType,true), StructField(ActualArrivalTime,StringType,true), StructField(ArrivalDelay,StringType,true), StructField(ElapsedTime,IntegerType,true), StructFie...
+scala>     
+     | val df = spark.read.schema(customSchema).csv("test.csv.bz2")
+df: org.apache.spark.sql.DataFrame = [DayOfMonth: int, DayOfWeek: int ... 15 more fields]
+
+scala> // we will be accessing the dataframe multiple times so persist in memory 
+
+scala> df.persist()
+res2: df.type = [DayOfMonth: int, DayOfWeek: int ... 15 more fields]
+
+scala> df.printSchema()
+root
+ |-- DayOfMonth: integer (nullable = true)
+ |-- DayOfWeek: integer (nullable = true)
+ |-- CarrierCode: string (nullable = true)
+ |-- TailNum: string (nullable = true)
+ |-- FlightNum: string (nullable = true)
+ |-- OriginAirportID: long (nullable = true)
+ |-- OriginAirport: string (nullable = true)
+ |-- DestinationAirportID: long (nullable = true)
+ |-- DestinationAirport: string (nullable = true)
+ |-- ScheduledDepartureTime: string (nullable = true)
+ |-- ActualDepartureTime: string (nullable = true)
+ |-- DepartureDelay: integer (nullable = true)
+ |-- ScheduledArrivalTime: string (nullable = true)
+ |-- ActualArrivalTime: string (nullable = true)
+ |-- ArrivalDelay: string (nullable = true)
+ |-- ElapsedTime: integer (nullable = true)
+ |-- Distance: integer (nullable = true)
+
+
+scala> 
+
+scala> // select out the airport IDs (to be used as vertex IDs) and airport code s
+
+scala> val airportOrigins = df.select($"OriginAirportID", $"OriginAirport")
+airportOrigins: org.apache.spark.sql.DataFrame = [OriginAirportID: bigint, OriginAirport: string]
+
+scala> val airportDests = df.select($"DestinationAirportID", $"DestinationAirpor t")
+airportDests: org.apache.spark.sql.DataFrame = [DestinationAirportID: bigint, DestinationAirport: string]
+
+scala> 
+
+scala> // contruct an RDD of airport vertices by merging the origin and destinat ion airport data into a single
+
+scala> //   dataframe, converting to RDD, and finding unique values
+
+scala> val airports = airportOrigins.union(airportDests).toDF("AirportID", "Airp ortCode").distinct()
+airports: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [AirportID: bigint, AirportCode: string]
+
+scala> println("Unique airports: " + airports.count())
+Unique airports: 301
+
+scala> airports.show(10)
++---------+-----------+
+|AirportID|AirportCode|
++---------+-----------+
+|    10754|        BRW|
+|    11977|        GRB|
+|    12007|        GTR|
+|    12402|        ITO|
+|    10135|        ABE|
+|    15024|        STT|
+|    15370|        TUL|
+|    12278|        ICT|
+|    10792|        BUF|
+|    13024|        LMT|
++---------+-----------+
+only showing top 10 rows
+
+
+scala> 
+
+scala> // Define default vertex
+
+scala> val defaultAirport = ("Missing")
+defaultAirport: String = Missing
+
+scala> 
+
+scala> // Construct the graph vertices from the airport ID numbers and airport c odes.
+
+scala> // When converting from dataframe to RDD, each type is cast to Any, so
+
+scala> // ".toString.toLong" is required to cast the vertex ID to a Long.
+
+scala> val airportVertices: RDD[(VertexId, String)] = airports.rdd.map(x => (x(0 ).toString.toLong, x(1).toString))
+airportVertices: org.apache.spark.rdd.RDD[(org.apache.spark.graphx.VertexId, String)] = MapPartitionsRDD[37] at map at <console>:41
+
+scala> airportVertices.take(10)
+res6: Array[(org.apache.spark.graphx.VertexId, String)] = Array((10754,BRW), (11977,GRB), (12007,GTR), (12402,ITO), (10135,ABE), (15024,STT), (15370,TUL), (12278,ICT), (10792,BUF), (13024,LMT))
+
+scala> 
+
+scala> // Extract vertex IDs for airport origins and destinations and verify tha t
+
+scala> //   each pair has many flights between them
+
+scala> val flightsFromTo = df.select($"OriginAirportID", $"DestinationAirportID" , $"ElapsedTime", $"DepartureDelay", $"ArrivalDelay")
+flightsFromTo: org.apache.spark.sql.DataFrame = [OriginAirportID: bigint, DestinationAirportID: bigint ... 3 more fields]
+
+scala> //println("Total number of flights:    " + flightsFromTo.count())
+
+scala> //println("Number of distinct flights: " + flightsFromTo.distinct.count() )
+
+scala> 
+
+scala> val flightEdges = flightsFromTo.rdd.map(x => Edge(
+     |     x(0).toString.toLong,    // origin airport ID
+     |     x(1).toString.toLong,    // arrival aiport ID
+     |     // Define Edge property - (ElapsedTime, DepartureDelay, ArrivalDelay) 
+     |     (x(2).toString.toInt, x(3).toString.toInt, x(4).toString.toInt)
+     | ))
+flightEdges: org.apache.spark.rdd.RDD[org.apache.spark.graphx.Edge[(Int, Int, Int)]] = MapPartitionsRDD[41] at map at <console>:37
+
+scala> flightEdges.take(10)
+res7: Array[org.apache.spark.graphx.Edge[(Int, Int, Int)]] = Array(Edge(12478,12892,(385,14,13)), Edge(12478,12892,(385,0,1)), Edge(12478,12892,(385,65,59)), Edge(12478,12892,(385,110,110)), Edge(12478,12892,(385,17,0)), Edge(12478,12892,(385,10,0)), Edge(12478,12892,(385,23,0)), Edge(12478,12892,(385,0,0)), Edge(12478,12892,(385,29,20)), Edge(12478,12892,(385,15,79)))
+
+scala> 
+
+scala> // Now create the airport-flights graph
+
+scala> val flightGraph = Graph(airportVertices, flightEdges, defaultAirport)
+flightGraph: org.apache.spark.graphx.Graph[String,(Int, Int, Int)] = org.apache.spark.graphx.impl.GraphImpl@e840be5
+
+scala> // we will be performing multiple queries, so persist in memory
+
+scala> flightGraph.persist()
+res8: org.apache.spark.graphx.Graph[String,(Int, Int, Int)] = org.apache.spark.graphx.impl.GraphImpl@e840be5
+
+scala> 
+
+scala> /*-------------*/
+     | // Q1 - Find the top 10 busiest airports.
+     | // Define the busiest airport to be the one with the most in-degrees plus 
+     | //   out-degrees, i.e. total number of flights in and out.
+     | val airportDegree = flightGraph.inDegrees.join(flightGraph.outDegrees).
+     |     map(x => (x._1, x._2._1 + x._2._2)).    // sum inDeg + outDeg for eac h vertex
+     |     join(airportVertices).                  // join with vertices RDD so  vertex names can be attached
+     |     sortBy(_._2._1, ascending=false)        // sort descending order
+airportDegree: org.apache.spark.rdd.RDD[(org.apache.spark.graphx.VertexId, (Int, String))] = MapPartitionsRDD[73] at sortBy at <console>:58
+
+scala> 
+
+scala> // display results and print to file
+
+scala> airportDegree.take(10).map(_._2).foreach(println(_))
+(56500,ATL)
+(45352,DFW)
+(35926,LAX)
+(35655,ORD)
+(34361,DEN)
+(26697,IAH)
+(26180,PHX)
+(26125,SFO)
+(21646,LAS)
+(18685,CLT)
+
+scala> val pw = new PrintWriter(new File(path + "partB_1.csv"))
+pw: java.io.PrintWriter = java.io.PrintWriter@3b9a82bc
+
+scala> pw.write("NumberFlights,AirportCode\n")
+
+scala> airportDegree.take(10).map(_._2).foreach(pw.println)
+
+scala> pw.close
+
+scala> 
+
+scala> /*-------------*/
+     | // Q2 - The top 10 routes based on actual time in air
+     | 
+     | // Actual time in air =  Elapsed Time - DepartuareDelay + ArrivalDelay
+     | //   actual time for each edge calculated from edge attributes
+     | val actualTime = flightGraph.mapEdges(e => e.attr._1 - e.attr._2 + e.attr ._3).
+     |     groupEdges(_+_).                                    // aggregate time  for all directed edges between two vertices
+     |     triplets.map(t => (t.srcAttr, t.dstAttr, t.attr)).  // extract vertex  and total actual time information
+     |     sortBy(_._3, ascending=false)                       // sort in descen ding order
+actualTime: org.apache.spark.rdd.RDD[(String, String, Int)] = MapPartitionsRDD[88] at sortBy at <console>:59
+
+scala> 
+
+scala> // display results and print to file
+
+scala> actualTime.take(10).foreach(println(_))
+(JFK,LAX,332482)
+(LAX,JFK,271583)
+(JFK,SFO,266479)
+(SFO,JFK,214890)
+(ORD,SFO,153282)
+(ORD,LAX,153198)
+(EWR,LAX,145482)
+(SFO,ORD,144292)
+(EWR,SFO,144139)
+(LAX,ORD,143134)
+
+scala> val pw = new PrintWriter(new File(path + "partB_2.csv"))
+pw: java.io.PrintWriter = java.io.PrintWriter@3add5d6f
+
+scala> pw.write("OriginAirport,DestinationAirport,ActualTimeInAir\n")
+
+scala> actualTime.take(10).foreach(pw.println)
+
+scala> pw.close
+
+scala> 
+
+scala> /*-------------*/
+     | // Q3 - The 10 worst routes in terms of average arrival delays
+     | 
+     | // get arrival delay from edge attribute and insert edge counter
+     | val arrivalDelay = flightGraph.mapEdges(e => (e.attr._3, 1)).
+     |     groupEdges((e1, e2) => (e1._1 + e2._1, e1._2 + e2._2)). // aggregate  arrival delays for each route and count like edges
+     |     mapEdges(e => e.attr._1.toFloat / e.attr._2).           // average =  total arrival delay / number of edges per route
+     |     triplets.map(t => (t.srcAttr, t.dstAttr, t.attr)).      // extract ve rtex and average arrival delay information
+     |     sortBy(_._3, ascending=false)                           // sort in de scending order
+arrivalDelay: org.apache.spark.rdd.RDD[(String, String, Float)] = MapPartitionsRDD[105] at sortBy at <console>:59
+
+scala> 
+
+scala> // display results and print to file    
+
+scala> arrivalDelay.take(10).foreach(println(_))
+(HSV,ATL,322.0)
+(JFK,JAC,302.0)
+(JAC,JFK,299.0)
+(GSO,ATL,295.0)
+(SYR,BTV,244.0)
+(MEM,MCO,236.0)
+(MCO,MEM,233.0)
+(ATL,ABQ,227.5)
+(EWR,SLC,217.0)
+(ATL,SLC,211.0)
+
+scala> val pw = new PrintWriter(new File(path + "partB_3.csv"))
+pw: java.io.PrintWriter = java.io.PrintWriter@5121f908
+
+scala> pw.write("OriginAirport,DestinationAirport,AverageArrivalDelay\n")
+
+scala> arrivalDelay.take(10).foreach(pw.println)
+
+scala> pw.close
+
+scala> 
+
+scala> /*-------------*/
+     | // This code is based on GraphX documentation code and StackExchange code 
+     | //   snippet:
+     | //    https://spark.apache.org/docs/latest/graphx-programming-guide.html# neighborhood-aggregation
+     | //    https://stackoverflow.com/questions/35648558/how-to-sum-edge-weight s-with-graphx
+     | // with some modifications for the specific problem
+     | val departureDelays: RDD[(VertexId, (Int, Int))] = 
+     |     flightGraph.mapEdges(e => e.attr._2).          // collapse edge attri bute to departure delay
+     |     aggregateMessages[(Int, Int)](
+     |         triplet => { // Map Function
+     |             triplet.sendToSrc((1, triplet.attr))  // send edge counter an d departure delay to source
+     |         }, // Reduce Function
+     |         (a, b) => (a._1 + b._1, a._2 + b._2),     // count edges and aggr egate departure delays
+     |         TripletFields.EdgeOnly
+     |     )
+departureDelays: org.apache.spark.rdd.RDD[(org.apache.spark.graphx.VertexId, (Int, Int))] = VertexRDDImpl[111] at RDD at VertexRDD.scala:57
+
+scala> 
+
+scala> // Divide total departure delays by number of edges (flights)
+
+scala> val avgDepartureDelays: RDD[(VertexId, Double)] =
+     |     departureDelays.mapValues( {
+     |         case (count, totalDelay) => totalDelay.toFloat / count
+     |     } )//.join(airportVertices)            // join with vertices RDD so v ertex names can be attached
+avgDepartureDelays: org.apache.spark.rdd.RDD[(org.apache.spark.graphx.VertexId, Double)] = MapPartitionsRDD[112] at mapValues at <console>:54
+
+scala> //      .sortBy(_._2._1, ascending=false)  // sort descending order
+
+scala>         
+     | // display results and print to file
+
+scala> avgDepartureDelays.take(10).foreach(println(_))
+(10800,13.341666221618652)
+(15401,4.056180000305176)
+(12402,3.541747570037842)
+(11002,17.224720001220703)
+(12003,8.520270347595215)
+(11603,11.471014022827148)
+(11203,25.952381134033203)
+(11003,28.305343627929688)
+(13204,22.311965942382812)
+(12206,12.002967834472656)
+
+scala> val pw = new PrintWriter(new File(path + "partB_4.csv"))
+pw: java.io.PrintWriter = java.io.PrintWriter@30a5cade
+
+scala> pw.write("OriginAirport,AverageDepartureDelay\n")
+
+scala> avgDepartureDelays.take(10).foreach(pw.println)
+
+scala> pw.close
+
+scala> 
+
+scala> // end!
+
+scala> :quit

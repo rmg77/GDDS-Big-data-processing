@@ -1,0 +1,11 @@
+OriginAirport,DestinationAirport,AverageArrivalDelay
+(HSV,ATL,322.0)
+(JFK,JAC,302.0)
+(JAC,JFK,299.0)
+(GSO,ATL,295.0)
+(SYR,BTV,244.0)
+(MEM,MCO,236.0)
+(MCO,MEM,233.0)
+(ATL,ABQ,227.5)
+(EWR,SLC,217.0)
+(ATL,SLC,211.0)
