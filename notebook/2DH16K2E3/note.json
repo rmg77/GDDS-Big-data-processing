@@ -1,0 +1,113 @@
+{
+  "paragraphs": [
+    {
+      "text": "//Import packages\nimport scala.io.Source\nimport java.io._\nimport java.util.zip._\nimport scala.collection.mutable.ArrayBuffer\n\n// Define a function that converts GZIP to a stream\ndef gis(s: String) \u003d new GZIPInputStream(new FileInputStream(s))\n\n// Set the length of the reservoir\nval n \u003d args(1).toInt\n\n// Create a random number generator\nval myrandnum \u003d scala.util.Random\nmyrandnum.setSeed(5202)\n\n// Define an Array of titles (String)\nvar sample_titles \u003d ArrayBuffer[String]()\n\n// Define an Array of indices (Int)\nvar sample_indices \u003d ArrayBuffer[Int]()\n\n// Add all titles and indices to the arrays\nfor ((line, index) \u003c- Source.fromInputStream(\n    gis(args(0))).getLines().zipWithIndex) {\n    if (index \u003c n) {\n        sample_titles +\u003d line\n        sample_indices +\u003d index\n    } else {\n        val t \u003d myrandnum.nextInt(index)\n        if (t \u003c n) {\n            sample_titles(t) \u003d line\n            sample_indices(t) \u003d index\n        }\n    }   \n}\n\n// Print all data\nfor (i \u003c- sample_titles.indices)\n    println(s\"sample_titles(\"+i+\") -\u003e [\"+sample_indices(i)+\"]\"+sample_titles(i))\n",
+      "user": "anonymous",
+      "dateUpdated": "Jun 19, 2018 11:45:54 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\u003cconsole\u003e:57: error: not found: value #!/\n       #!/usr/bin/env scala\n       ^\n\u003cconsole\u003e:57: error: not found: value /\n       #!/usr/bin/env scala\n             ^\n\u003cconsole\u003e:57: error: not found: value /\n       #!/usr/bin/env scala\n                 ^\n\u003cconsole\u003e:57: error: package scala is not a value\n       #!/usr/bin/env scala\n                      ^\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528202094363_815495336",
+      "id": "20180605-223454_1356554636",
+      "dateCreated": "Jun 5, 2018 10:34:54 PM",
+      "dateStarted": "Jun 19, 2018 11:45:21 AM",
+      "dateFinished": "Jun 19, 2018 11:45:21 AM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// Import the packages\nimport org.apache.spark._\nimport org.apache.spark.streaming._\n\n// Force Spark to talk less and work more!\nsc.setLogLevel(\"OFF\")\nsc.stop()\n\n// Create a local StreamingContext with 2 working threads \n// The master requires 2 cores to prevent from a starvation scenario.\nval conf \u003d new SparkConf().setMaster(\"local[2]\").setAppName(\"NetworkWordCount\")\n\n// Set batch interval of 1 second.\nval ssc \u003d new StreamingContext(conf, Seconds(1))\n\n// Create a DStream that will connect to hostname:port, like localhost:9999\nval lines \u003d ssc.socketTextStream(\"localhost\", 9999)\n\n// Split each line into words\nval words \u003d lines.flatMap(_.split(\" \"))\n\n// Count each word in each batch\nval wordCounts \u003d words.map(word \u003d\u003e (word, 1)).reduceByKey(_ + _)\n\n// Print the results\nwordCounts.print()\n\n// Start the computation\nssc.start()\n\n// Also, wait for 10 seconds or termination signal\nssc.awaitTerminationOrTimeout(1000)\nssc.stop()\n",
+      "user": "anonymous",
+      "dateUpdated": "Jun 19, 2018 12:29:45 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark._\nimport org.apache.spark.streaming._\nconf: org.apache.spark.SparkConf \u003d org.apache.spark.SparkConf@a0a685a\norg.apache.spark.SparkException: Only one SparkContext may be running in this JVM (see SPARK-2243). To ignore this error, set spark.driver.allowMultipleContexts \u003d true. The currently running SparkContext was created at:\norg.apache.spark.SparkContext.\u003cinit\u003e(SparkContext.scala:76)\norg.apache.spark.streaming.StreamingContext$.createNewSparkContext(StreamingContext.scala:839)\norg.apache.spark.streaming.StreamingContext.\u003cinit\u003e(StreamingContext.scala:85)\n\u003cinit\u003e(\u003cconsole\u003e:50)\n\u003cinit\u003e(\u003cconsole\u003e:55)\n\u003cinit\u003e(\u003cconsole\u003e:57)\n\u003cinit\u003e(\u003cconsole\u003e:59)\n\u003cinit\u003e(\u003cconsole\u003e:61)\n\u003cinit\u003e(\u003cconsole\u003e:63)\n\u003cinit\u003e(\u003cconsole\u003e:65)\n\u003cinit\u003e(\u003cconsole\u003e:67)\n\u003cinit\u003e(\u003cconsole\u003e:69)\n\u003cinit\u003e(\u003cconsole\u003e:71)\n\u003cinit\u003e(\u003cconsole\u003e:73)\n\u003cinit\u003e(\u003cconsole\u003e:75)\n\u003cinit\u003e(\u003cconsole\u003e:77)\n.\u003cinit\u003e(\u003cconsole\u003e:81)\n.\u003cclinit\u003e(\u003cconsole\u003e)\n.$print$lzycompute(\u003cconsole\u003e:7)\n.$print(\u003cconsole\u003e:6)\n  at org.apache.spark.SparkContext$$anonfun$assertNoOtherContextIsRunning$2.apply(SparkContext.scala:2479)\n  at org.apache.spark.SparkContext$$anonfun$assertNoOtherContextIsRunning$2.apply(SparkContext.scala:2475)\n  at scala.Option.foreach(Option.scala:257)\n  at org.apache.spark.SparkContext$.assertNoOtherContextIsRunning(SparkContext.scala:2475)\n  at org.apache.spark.SparkContext$.markPartiallyConstructed(SparkContext.scala:2564)\n  at org.apache.spark.SparkContext.\u003cinit\u003e(SparkContext.scala:85)\n  at org.apache.spark.streaming.StreamingContext$.createNewSparkContext(StreamingContext.scala:839)\n  at org.apache.spark.streaming.StreamingContext.\u003cinit\u003e(StreamingContext.scala:85)\n  ... 55 elided\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528253214901_-1702277085",
+      "id": "20180606-124654_110977191",
+      "dateCreated": "Jun 6, 2018 12:46:54 PM",
+      "dateStarted": "Jun 19, 2018 12:29:45 PM",
+      "dateFinished": "Jun 19, 2018 12:29:47 PM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "user": "anonymous",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1529375385793_1337551639",
+      "id": "20180619-122945_2108818584",
+      "dateCreated": "Jun 19, 2018 12:29:45 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "streaming",
+  "id": "2DH16K2E3",
+  "angularObjects": {
+    "2CY4SB1H5:shared_process": [],
+    "2CXC618EC:shared_process": [],
+    "2CYVBGAMQ:shared_process": [],
+    "2CY3Y61TM:shared_process": [],
+    "2CXRH3T8B:shared_process": [],
+    "2CXTQKGUW:shared_process": [],
+    "2CXCNM6ZT:shared_process": [],
+    "2CXZADFKB:shared_process": [],
+    "2CUZKD23K:shared_process": [],
+    "2CVM42UGQ:shared_process": [],
+    "2CVPRSQB6:shared_process": [],
+    "2CYHQDYMU:shared_process": [],
+    "2CVV5NFCM:shared_process": [],
+    "2CW23H68H:shared_process": [],
+    "2CY8N5QUM:shared_process": [],
+    "2CVTBZ9KW:shared_process": [],
+    "2CWGDUPZW:shared_process": [],
+    "2CVKDDERZ:shared_process": [],
+    "2CYGMRJ4Q:shared_process": []
+  },
+  "config": {},
+  "info": {}
+}

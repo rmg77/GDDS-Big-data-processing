@@ -1,0 +1,123 @@
+{
+  "paragraphs": [
+    {
+      "text": "// spark-shell spark-shell --packages org.mongodb.spark:mongo-spark-connector_2.10:2.2.1 is \n// dispensed by an entry on spark sote config setting\n\nimport org.apache.spark.SparkContext\nimport org.apache.spark.SparkConf\nimport com.mongodb.spark._\n\nsc.stop\n\nval in_uri \u003d \"spark.mongodb.input.uri\"\nval in_uri_val \u003d \"mongodb://localhost/test.restaurants\"\n\nval out_uri \u003d \"spark.mongodb.output.uri\"\nval out_uri_val \u003d \"mongodb://localhost/test.restaurants\"\n\n//the following lines cannot be run in separate cell (blockmgr id conflicts)\nval conf \u003d new SparkConf().setAppName(\"MongoDBExample\").setMaster(\"local\").set(in_uri,in_uri_val).set(out_uri,out_uri_val)\n\nval sc \u003d new SparkContext(conf)\nval sqlContext \u003d new org.apache.spark.sql.SQLContext(sc)\n\nval rdd \u003d MongoSpark.load(sc)\n println(rdd.count)\n val df \u003d rdd.toDF\n df.dtypes\n df.show\n df.createOrReplaceTempView(\"rest\")\n",
+      "user": "anonymous",
+      "dateUpdated": "Nov 14, 2017 10:50:49 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.SparkContext\nimport org.apache.spark.SparkConf\nimport com.mongodb.spark._\nin_uri: String \u003d spark.mongodb.input.uri\nin_uri_val: String \u003d mongodb://localhost/test.restaurants\nout_uri: String \u003d spark.mongodb.output.uri\nout_uri_val: String \u003d mongodb://localhost/test.restaurants\nconf: org.apache.spark.SparkConf \u003d org.apache.spark.SparkConf@7e4d4946\nsc: org.apache.spark.SparkContext \u003d org.apache.spark.SparkContext@2eafa8b2\nwarning: there was one deprecation warning; re-run with -deprecation for details\nsqlContext: org.apache.spark.sql.SQLContext \u003d org.apache.spark.sql.SQLContext@33517364\nrdd: com.mongodb.spark.rdd.MongoRDD[org.bson.Document] \u003d MongoRDD[0] at RDD at MongoRDD.scala:47\n25359\ndf: org.apache.spark.sql.DataFrame \u003d [_id: struct\u003coid: string\u003e, address: struct\u003cbuilding: string, coord: array\u003cdouble\u003e ... 2 more fields\u003e ... 5 more fields]\nres90: Array[(String, String)] \u003d Array((_id,StructType(StructField(oid,StringType,true))), (address,StructType(StructField(building,StringType,true), StructField(coord,ArrayType(DoubleType,true),true), StructField(street,StringType,true), StructField(zipcode,StringType,true))), (borough,StringType), (cuisine,StringType), (grades,ArrayType(StructType(StructField(date,TimestampType,true), StructField(grade,StringType,true), StructField(score,IntegerType,true)),true)), (name,StringType), (restaurant_id,StringType))\n+--------------------+--------------------+-------------+--------------------+--------------------+--------------------+-------------+\n|                 _id|             address|      borough|             cuisine|              grades|                name|restaurant_id|\n+--------------------+--------------------+-------------+--------------------+--------------------+--------------------+-------------+\n|[59fab502131d0876...|[1007,WrappedArra...|        Bronx|              Bakery|[[2014-03-03 11:0...|Morris Park Bake ...|     30075445|\n|[59fab502131d0876...|[469,WrappedArray...|     Brooklyn|          Hamburgers|[[2014-12-30 11:0...|             Wendy\u0027S|     30112340|\n|[59fab502131d0876...|[351,WrappedArray...|    Manhattan|               Irish|[[2014-09-06 10:0...|Dj Reynolds Pub A...|     30191841|\n|[59fab502131d0876...|[2780,WrappedArra...|     Brooklyn|            American|[[2014-06-10 10:0...|     Riviera Caterer|     40356018|\n|[59fab502131d0876...|[97-22,WrappedArr...|       Queens|       Jewish/Kosher|[[2014-11-24 11:0...|  Tov Kosher Kitchen|     40356068|\n|[59fab502131d0876...|[8825,WrappedArra...|       Queens|            American|[[2014-11-15 11:0...|Brunos On The Bou...|     40356151|\n|[59fab502131d0876...|[2206,WrappedArra...|Staten Island|       Jewish/Kosher|[[2014-10-06 11:0...|       Kosher Island|     40356442|\n|[59fab502131d0876...|[7114,WrappedArra...|     Brooklyn|        Delicatessen|[[2014-05-29 10:0...|  Wilken\u0027S Fine Food|     40356483|\n|[59fab502131d0876...|[6409,WrappedArra...|     Brooklyn|            American|[[2014-07-18 10:0...|     Regina Caterers|     40356649|\n|[59fab502131d0876...|[1839,WrappedArra...|     Brooklyn|Ice Cream, Gelato...|[[2014-07-14 10:0...|Taste The Tropics...|     40356731|\n|[59fab502131d0876...|[2300,WrappedArra...|        Bronx|            American|[[2014-05-28 10:0...|           Wild Asia|     40357217|\n|[59fab502131d0876...|[7715,WrappedArra...|     Brooklyn|            American|[[2014-04-16 10:0...|C \u0026 C Catering Se...|     40357437|\n|[59fab502131d0876...|[1,WrappedArray(-...|    Manhattan|            American|[[2014-05-07 10:0...|1 East 66Th Stree...|     40359480|\n|[59fab502131d0876...|[203,WrappedArray...|     Brooklyn|Ice Cream, Gelato...|[[2014-02-10 11:0...|    Carvel Ice Cream|     40360076|\n|[59fab502131d0876...|[265-15,WrappedAr...|       Queens|Ice Cream, Gelato...|[[2014-10-28 11:0...|    Carvel Ice Cream|     40361322|\n|[59fab502131d0876...|[6909,WrappedArra...|     Brooklyn|        Delicatessen|[[2014-08-21 10:0...|   Nordic Delicacies|     40361390|\n|[59fab502131d0876...|[522,WrappedArray...|    Manhattan|            American|[[2014-09-02 10:0...|       Glorious Food|     40361521|\n|[59fab502131d0876...|[284,WrappedArray...|     Brooklyn|            American|[[2014-11-19 11:0...|   The Movable Feast|     40361606|\n|[59fab502131d0876...|[129-08,WrappedAr...|       Queens|        Delicatessen|[[2014-08-16 10:0...|          Sal\u0027S Deli|     40361618|\n|[59fab502131d0876...|[705,WrappedArray...|     Brooklyn|       Jewish/Kosher|[[2014-11-10 11:0...|         Seuda Foods|     40360045|\n+--------------------+--------------------+-------------+--------------------+--------------------+--------------------+-------------+\nonly showing top 20 rows\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1510408720113_-204841525",
+      "id": "20171112-005840_179079333",
+      "dateCreated": "Nov 12, 2017 12:58:40 AM",
+      "dateStarted": "Nov 14, 2017 10:50:49 AM",
+      "dateFinished": "Nov 14, 2017 10:50:56 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sql select score, sum(score) from rest group by zipcode",
+      "user": "anonymous",
+      "dateUpdated": "Nov 14, 2017 10:50:49 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "sql"
+        },
+        "editorMode": "ace/mode/sql"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Table or view not found: rest; line 1 pos 30\nset zeppelin.spark.sql.stacktrace \u003d true to see full stacktrace"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1510540816223_-1201181487",
+      "id": "20171113-134016_1012730449",
+      "dateCreated": "Nov 13, 2017 1:40:16 PM",
+      "dateStarted": "Nov 14, 2017 10:50:50 AM",
+      "dateFinished": "Nov 14, 2017 10:50:56 AM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sql\n",
+      "user": "anonymous",
+      "dateUpdated": "Nov 14, 2017 10:50:49 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "sql"
+        },
+        "editorMode": "ace/mode/sql"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1510616547105_-2095473296",
+      "id": "20171114-104227_1431084016",
+      "dateCreated": "Nov 14, 2017 10:42:27 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "mongodb connector example",
+  "id": "2D1KYYJ1W",
+  "angularObjects": {
+    "2CY4SB1H5:shared_process": [],
+    "2CXC618EC:shared_process": [],
+    "2CYVBGAMQ:shared_process": [],
+    "2CY3Y61TM:shared_process": [],
+    "2CXRH3T8B:shared_process": [],
+    "2CXTQKGUW:shared_process": [],
+    "2CXCNM6ZT:shared_process": [],
+    "2CXZADFKB:shared_process": [],
+    "2CUZKD23K:shared_process": [],
+    "2CVM42UGQ:shared_process": [],
+    "2CVPRSQB6:shared_process": [],
+    "2CYHQDYMU:shared_process": [],
+    "2CVV5NFCM:shared_process": [],
+    "2CW23H68H:shared_process": [],
+    "2CY8N5QUM:shared_process": [],
+    "2CVTBZ9KW:shared_process": [],
+    "2CWGDUPZW:shared_process": [],
+    "2CVKDDERZ:shared_process": [],
+    "2CYGMRJ4Q:shared_process": []
+  },
+  "config": {},
+  "info": {}
+}

@@ -1,0 +1,358 @@
+{
+  "paragraphs": [
+    {
+      "text": "    // Decision tree example from Alexandria Module 6.2.2.1\n    import org.apache.spark.mllib.tree.DecisionTree\n    import org.apache.spark.mllib.tree.model.DecisionTreeModel\n    import org.apache.spark.mllib.util.MLUtils\n    \n    // Load and parse the data file.\n    val data \u003d MLUtils.loadLibSVMFile(sc,\n        \"/srv/home/rgai0001/spark-2.2.1-bin-hadoop2.7/data/mllib/sample_libsvm_data.txt\")\n    // Split the data into training and test sets (30% held out for testing)\n    val splits \u003d data.randomSplit(Array(0.7, 0.3))\n    val (trainingData, testData) \u003d (splits(0), splits(1))",
+      "user": "anonymous",
+      "dateUpdated": "Jun 13, 2018 9:12:39 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.mllib.tree.DecisionTree\nimport org.apache.spark.mllib.tree.model.DecisionTreeModel\nimport org.apache.spark.mllib.util.MLUtils\ndata: org.apache.spark.rdd.RDD[org.apache.spark.mllib.regression.LabeledPoint] \u003d MapPartitionsRDD[205] at map at MLUtils.scala:84\nsplits: Array[org.apache.spark.rdd.RDD[org.apache.spark.mllib.regression.LabeledPoint]] \u003d Array(MapPartitionsRDD[206] at randomSplit at \u003cconsole\u003e:52, MapPartitionsRDD[207] at randomSplit at \u003cconsole\u003e:52)\ntrainingData: org.apache.spark.rdd.RDD[org.apache.spark.mllib.regression.LabeledPoint] \u003d MapPartitionsRDD[206] at randomSplit at \u003cconsole\u003e:52\ntestData: org.apache.spark.rdd.RDD[org.apache.spark.mllib.regression.LabeledPoint] \u003d MapPartitionsRDD[207] at randomSplit at \u003cconsole\u003e:52\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528844600852_-302934790",
+      "id": "20180613-090320_1464275972",
+      "dateCreated": "Jun 13, 2018 9:03:20 AM",
+      "dateStarted": "Jun 13, 2018 9:12:39 AM",
+      "dateFinished": "Jun 13, 2018 9:12:40 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "trainingData.collect()",
+      "user": "anonymous",
+      "dateUpdated": "Jun 13, 2018 9:17:11 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "res94: Array[org.apache.spark.mllib.regression.LabeledPoint] \u003d Array((0.0,(692,[127,128,129,130,131,154,155,156,157,158,159,181,182,183,184,185,186,187,188,189,207,208,209,210,211,212,213,214,215,216,217,235,236,237,238,239,240,241,242,243,244,245,262,263,264,265,266,267,268,269,270,271,272,273,289,290,291,292,293,294,295,296,297,300,301,302,316,317,318,319,320,321,328,329,330,343,344,345,346,347,348,349,356,357,358,371,372,373,374,384,385,386,399,400,401,412,413,414,426,427,428,429,440,441,442,454,455,456,457,466,467,468,469,470,482,483,484,493,494,495,496,497,510,511,512,520,521,522,523,538,539,540,547,548,549,550,566,567,568,569,570,571,572,573,574,575,576,577,578,594,595,596,597,598,599,600,601,602,603,604,622,623,624,625,626,627,628,629,630,651,652,653,654,655,656,657],[51.0,159.0,..."
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528845391429_-112377937",
+      "id": "20180613-091631_1592405446",
+      "dateCreated": "Jun 13, 2018 9:16:31 AM",
+      "dateStarted": "Jun 13, 2018 9:17:11 AM",
+      "dateFinished": "Jun 13, 2018 9:17:12 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "testData.collect()",
+      "user": "anonymous",
+      "dateUpdated": "Jun 13, 2018 9:17:51 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "res95: Array[org.apache.spark.mllib.regression.LabeledPoint] \u003d Array((1.0,(692,[158,159,160,161,185,186,187,188,189,213,214,215,216,217,240,241,242,243,244,245,267,268,269,270,271,295,296,297,298,322,323,324,325,326,349,350,351,352,353,377,378,379,380,381,404,405,406,407,408,431,432,433,434,435,459,460,461,462,463,486,487,488,489,490,514,515,516,517,518,542,543,544,545,569,570,571,572,573,596,597,598,599,600,601,624,625,626,627,652,653,654,655,680,681,682,683],[124.0,253.0,255.0,63.0,96.0,244.0,251.0,253.0,62.0,127.0,251.0,251.0,253.0,62.0,68.0,236.0,251.0,211.0,31.0,8.0,60.0,228.0,251.0,251.0,94.0,155.0,253.0,253.0,189.0,20.0,253.0,251.0,235.0,66.0,32.0,205.0,253.0,251.0,126.0,104.0,251.0,253.0,184.0,15.0,80.0,240.0,251.0,193.0,23.0,32.0,253.0,253.0,253.0,159.0,151.0,251.0,251.0,251.0,..."
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528845459541_-502974691",
+      "id": "20180613-091739_1334706424",
+      "dateCreated": "Jun 13, 2018 9:17:39 AM",
+      "dateStarted": "Jun 13, 2018 9:17:51 AM",
+      "dateFinished": "Jun 13, 2018 9:17:51 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// Train a DecisionTree model.\n//  Empty categoricalFeaturesInfo indicates all features are continuous.\nval numClasses \u003d 2\nval categoricalFeaturesInfo \u003d Map[Int, Int]()\nval impurity \u003d \"gini\"\nval maxDepth \u003d 5\nval maxBins \u003d 32\nval model \u003d DecisionTree.trainClassifier(trainingData, numClasses, categoricalFeaturesInfo,\n  impurity, maxDepth, maxBins)",
+      "user": "anonymous",
+      "dateUpdated": "Jun 13, 2018 9:14:31 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "numClasses: Int \u003d 2\ncategoricalFeaturesInfo: scala.collection.immutable.Map[Int,Int] \u003d Map()\nimpurity: String \u003d gini\nmaxDepth: Int \u003d 5\nmaxBins: Int \u003d 32\nmodel: org.apache.spark.mllib.tree.model.DecisionTreeModel \u003d DecisionTreeModel classifier of depth 2 with 5 nodes\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528845181031_-731513893",
+      "id": "20180613-091301_2010560269",
+      "dateCreated": "Jun 13, 2018 9:13:01 AM",
+      "dateStarted": "Jun 13, 2018 9:14:31 AM",
+      "dateFinished": "Jun 13, 2018 9:14:34 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// Evaluate model on test instances and compute test error\nval labelAndPreds \u003d testData.map { point \u003d\u003e\n    val prediction \u003d model.predict(point.features)\n    (point.label, prediction)\n}\nval testErr \u003d labelAndPreds.filter(r \u003d\u003e r._1 !\u003d r._2).count().toDouble / testData.count()\nprintln(\"Test Error \u003d \" + testErr)\nprintln(\"Learned classification tree model:\\n\" + model.toDebugString)",
+      "user": "anonymous",
+      "dateUpdated": "Jun 13, 2018 11:25:13 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "labelAndPreds: org.apache.spark.rdd.RDD[(Double, Double)] \u003d MapPartitionsRDD[223] at map at \u003cconsole\u003e:63\ntestErr: Double \u003d 0.0\nTest Error \u003d 0.0\nLearned classification tree model:\nDecisionTreeModel classifier of depth 2 with 5 nodes\n  If (feature 434 \u003c\u003d 0.0)\n   If (feature 100 \u003c\u003d 165.0)\n    Predict: 0.0\n   Else (feature 100 \u003e 165.0)\n    Predict: 1.0\n  Else (feature 434 \u003e 0.0)\n   Predict: 1.0\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528845049662_1134686838",
+      "id": "20180613-091049_568446101",
+      "dateCreated": "Jun 13, 2018 9:10:49 AM",
+      "dateStarted": "Jun 13, 2018 10:15:50 AM",
+      "dateFinished": "Jun 13, 2018 10:15:51 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// Save and load model\nmodel.save(sc, \"/srv/home/rgai0001/week6/decisionTreeClassificationModel\")\nval sameModel \u003d DecisionTreeModel.load(sc, \"/srv/home/rgai0001/week6/decisionTreeClassificationModel\")",
+      "user": "anonymous",
+      "dateUpdated": "Jun 13, 2018 11:27:09 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "sameModel: org.apache.spark.mllib.tree.model.DecisionTreeModel \u003d DecisionTreeModel classifier of depth 2 with 5 nodes\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528848950098_-654373121",
+      "id": "20180613-101550_707799770",
+      "dateCreated": "Jun 13, 2018 10:15:50 AM",
+      "dateStarted": "Jun 13, 2018 10:21:36 AM",
+      "dateFinished": "Jun 13, 2018 10:21:39 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// Regression example for decision trees\n// First block of code for loading in data is identical to above\n\n// Train a DecisionTree model.\n//  Empty categoricalFeaturesInfo indicates all features are continuous.\nval categoricalFeaturesInfo \u003d Map[Int, Int]()\nval impurity \u003d \"variance\"\nval maxDepth \u003d 5\nval maxBins \u003d 32\n// Note trainRegressor method, as opposed to trainClassified method above\nval model \u003d DecisionTree.trainRegressor(trainingData, categoricalFeaturesInfo, impurity,\n    maxDepth, maxBins)",
+      "user": "anonymous",
+      "dateUpdated": "Jun 13, 2018 11:23:52 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "categoricalFeaturesInfo: scala.collection.immutable.Map[Int,Int] \u003d Map()\nimpurity: String \u003d variance\nmaxDepth: Int \u003d 5\nmaxBins: Int \u003d 32\nmodel: org.apache.spark.mllib.tree.model.DecisionTreeModel \u003d DecisionTreeModel regressor of depth 2 with 5 nodes\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528849145938_-1499419100",
+      "id": "20180613-101905_966258348",
+      "dateCreated": "Jun 13, 2018 10:19:05 AM",
+      "dateStarted": "Jun 13, 2018 11:23:52 AM",
+      "dateFinished": "Jun 13, 2018 11:23:54 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// Evaluate model on test instances and compute test error\nval labelsAndPredictions \u003d testData.map { point \u003d\u003e\n    val prediction \u003d model.predict(point.features)\n    (point.label, prediction)\n}\nval testMSE \u003d labelsAndPredictions.map{ case (v, p) \u003d\u003e math.pow(v - p, 2) }.mean()\nprintln(\"Test Mean Squared Error \u003d \" + testMSE)\nprintln(\"Learned regression tree model:\\n\" + model.toDebugString)",
+      "user": "anonymous",
+      "dateUpdated": "Jun 13, 2018 11:26:11 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "labelsAndPredictions: org.apache.spark.rdd.RDD[(Double, Double)] \u003d MapPartitionsRDD[272] at map at \u003cconsole\u003e:61\ntestMSE: Double \u003d 0.0\nTest Mean Squared Error \u003d 0.0\nLearned regression tree model:\nDecisionTreeModel regressor of depth 2 with 5 nodes\n  If (feature 434 \u003c\u003d 0.0)\n   If (feature 100 \u003c\u003d 165.0)\n    Predict: 0.0\n   Else (feature 100 \u003e 165.0)\n    Predict: 1.0\n  Else (feature 434 \u003e 0.0)\n   Predict: 1.0\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528853032666_-57822455",
+      "id": "20180613-112352_994381835",
+      "dateCreated": "Jun 13, 2018 11:23:52 AM",
+      "dateStarted": "Jun 13, 2018 11:26:11 AM",
+      "dateFinished": "Jun 13, 2018 11:26:12 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// Save and load model\nmodel.save(sc, \"/srv/home/rgai0001/week6/decisionTreeRegressionModel\")\nval sameModel \u003d DecisionTreeModel.load(sc, \"/srv/home/rgai0001/week6/decisionTreeRegressionModel\")",
+      "user": "anonymous",
+      "dateUpdated": "Jun 13, 2018 11:28:52 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "sameModel: org.apache.spark.mllib.tree.model.DecisionTreeModel \u003d DecisionTreeModel regressor of depth 2 with 5 nodes\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528853171244_-261568638",
+      "id": "20180613-112611_1823969390",
+      "dateCreated": "Jun 13, 2018 11:26:11 AM",
+      "dateStarted": "Jun 13, 2018 11:28:52 AM",
+      "dateFinished": "Jun 13, 2018 11:28:55 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "user": "anonymous",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1528853279459_1618668588",
+      "id": "20180613-112759_364969249",
+      "dateCreated": "Jun 13, 2018 11:27:59 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "decision-tree",
+  "id": "2DF5Y5MDD",
+  "angularObjects": {
+    "2CY4SB1H5:shared_process": [],
+    "2CXC618EC:shared_process": [],
+    "2CYVBGAMQ:shared_process": [],
+    "2CY3Y61TM:shared_process": [],
+    "2CXRH3T8B:shared_process": [],
+    "2CXTQKGUW:shared_process": [],
+    "2CXCNM6ZT:shared_process": [],
+    "2CXZADFKB:shared_process": [],
+    "2CUZKD23K:shared_process": [],
+    "2CVM42UGQ:shared_process": [],
+    "2CVPRSQB6:shared_process": [],
+    "2CYHQDYMU:shared_process": [],
+    "2CVV5NFCM:shared_process": [],
+    "2CW23H68H:shared_process": [],
+    "2CY8N5QUM:shared_process": [],
+    "2CVTBZ9KW:shared_process": [],
+    "2CWGDUPZW:shared_process": [],
+    "2CVKDDERZ:shared_process": [],
+    "2CYGMRJ4Q:shared_process": []
+  },
+  "config": {},
+  "info": {}
+}

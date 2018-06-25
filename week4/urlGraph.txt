@@ -1,0 +1,50 @@
+http://www.bom.gov.au/	http://www.bom.gov.au/nsw/?ref=hdr	http://www.bom.gov.au/vic/?ref=hdr	http://www.bom.gov.au/qld/?ref=hdr	http://www.bom.gov.au/wa/?ref=hdr	http://www.bom.gov.au/sa/?ref=hdr	http://www.bom.gov.au/tas/?ref=hdr	http://www.bom.gov.au/act/?ref=hdr	http://www.bom.gov.au/nt/?ref=hdr	http://www.bom.gov.au/australia/?ref=hdr	http://www.bom.gov.au/australia/radar/	http://www.bom.gov.au/australia/satellite/	http://www.bom.gov.au/australia/charts/	http://www.bom.gov.au/australia/meteye/	
+http://www.bom.gov.au/nsw/?ref=hdr	http://www.bom.gov.au/nsw/forecasts/index.shtml	http://www.bom.gov.au/nsw/forecasts/sydney.shtml	http://www.bom.gov.au/nsw/observations/index.shtml	http://www.bom.gov.au/nsw/observations/sydney.shtml	http://www.bom.gov.au/products/IDR713.loop.shtml	http://www.bom.gov.au/australia/alpine/	http://www.bom.gov.au/
+http://www.bom.gov.au/vic/?ref=hdr	http://www.bom.gov.au/vic/forecasts/index.shtml	http://www.bom.gov.au/vic/forecasts/melbourne.shtml	http://www.bom.gov.au/vic/observations/index.shtml	http://www.bom.gov.au/nsw/observations/melbourne.shtml	http://www.bom.gov.au/products/ID023.loop.shtml	http://www.bom.gov.au/australia/alpine/	http://www.bom.gov.au/
+http://www.bom.gov.au/qld/?ref=hdr	http://www.bom.gov.au/qld/forecasts/index.shtml	http://www.bom.gov.au/qld/forecasts/brisbane.shtml	http://www.bom.gov.au/qld/observations/index.shtml	http://www.bom.gov.au/qld/observations/brisbane.shtml	http://www.bom.gov.au/products/IDR663.loop.shtml	http://www.bom.gov.au/climate/tropical-note/	http://www.bom.gov.au/
+http://www.bom.gov.au/wa/?ref=hdr	http://www.bom.gov.au/nsw/forecasts/index.shtml	http://www.bom.gov.au/wa/forecasts/perth.shtml	http://www.bom.gov.au/wa/observations/index.shtml	http://www.bom.gov.au/wa/observations/perth.shtml	http://www.bom.gov.au/products/IDR703.loop.shtml	http://www.bom.gov.au/climate/tropical-note/	http://www.bom.gov.au/
+http://www.bom.gov.au/sa/?ref=hdr	http://www.bom.gov.au/sa/forecasts/index.shtml	http://www.bom.gov.au/sa/forecasts/adelaide.shtml	http://www.bom.gov.au/sa/observations/index.shtml	http://www.bom.gov.au/sa/observations/adelaide.shtml	http://www.bom.gov.au/products/IDR643.loop.shtml	http://www.bom.gov.au/
+http://www.bom.gov.au/tas/?ref=hdr	http://www.bom.gov.au/tas/forecasts/index.shtml	http://www.bom.gov.au/tas/forecasts/hobart.shtml	http://www.bom.gov.au/tas/observations/index.shtml	http://www.bom.gov.au/tas/observations/hobart.shtml	http://www.bom.gov.au/products/IDR763.loop.shtml	http://www.bom.gov.au/
+http://www.bom.gov.au/act/?ref=hdr	http://www.bom.gov.au/act/forecasts/index.shtml	http://www.bom.gov.au/act/forecasts/canberra.shtml	http://www.bom.gov.au/act/observations/index.shtml	http://www.bom.gov.au/act/observations/canberra.shtml	http://www.bom.gov.au/products/IDR403.loop.shtml	http://www.bom.gov.au/australia/alpine/	http://www.bom.gov.au/
+http://www.bom.gov.au/nt/?ref=hdr	http://www.bom.gov.au/nt/forecasts/index.shtml	http://www.bom.gov.au/nt/forecasts/darwin.shtml	http://www.bom.gov.au/nt/observations/index.shtml	http://www.bom.gov.au/nt/observations/darwin.shtml	http://www.bom.gov.au/products/IDR633.loop.shtml	http://www.bom.gov.au/climate/tropical-note/	http://www.bom.gov.au/
+
+http://www.bom.gov.au/nsw/forecasts/index.shtml	http://www.bom.gov.au/nsw/forecasts/sydney.shtml	http://www.bom.gov.au/australia/alpine/	http://www.bom.gov.au/
+http://www.bom.gov.au/vic/forecasts/index.shtml	http://www.bom.gov.au/vic/forecasts/melbourne.shtml	http://www.bom.gov.au/australia/alpine/	http://www.bom.gov.au/
+http://www.bom.gov.au/qld/forecasts/index.shtml	http://www.bom.gov.au/qld/forecasts/brisbane.shtml	http://www.bom.gov.au/
+http://www.bom.gov.au/wa/forecasts/index.shtml	http://www.bom.gov.au/wa/forecasts/perth.shtml	http://www.bom.gov.au/
+http://www.bom.gov.au/sa/forecasts/index.shtml	http://www.bom.gov.au/sa/forecasts/adelaide.shtml	http://www.bom.gov.au/
+http://www.bom.gov.au/tas/forecasts/index.shtml	http://www.bom.gov.au/tas/forecasts/hobart.shtml	http://www.bom.gov.au/
+http://www.bom.gov.au/act/forecasts/index.shtml	http://www.bom.gov.au/act/forecasts/canberra.shtml	http://www.bom.gov.au/australia/alpine/	http://www.bom.gov.au/
+http://www.bom.gov.au/nt/forecasts/index.shtml	http://www.bom.gov.au/nt/forecasts/darwin.shtml	http://www.bom.gov.au/
+
+http://www.bom.gov.au/nsw/forecasts/sydney.shtml	http://www.bom.gov.au/nsw/forecasts/index.shtml
+http://www.bom.gov.au/vic/forecasts/melbourne.shtml	http://www.bom.gov.au/vic/forecasts/index.shtml
+http://www.bom.gov.au/qld/forecasts/brisbane.shtml	http://www.bom.gov.au/qld/forecasts/index.shtml
+http://www.bom.gov.au/wa/forecasts/perth.shtml		http://www.bom.gov.au/wa/forecasts/index.shtml
+http://www.bom.gov.au/sa/forecasts/adelaide.shtml	http://www.bom.gov.au/sa/forecasts/index.shtml
+http://www.bom.gov.au/tas/forecasts/hobart.shtml	http://www.bom.gov.au/tas/forecasts/index.shtml
+http://www.bom.gov.au/act/forecasts/canberra.shtml	http://www.bom.gov.au/act/forecasts/index.shtml
+http://www.bom.gov.au/nt/forecasts/darwin.shtml		http://www.bom.gov.au/nt/forecasts/index.shtml
+
+http://www.bom.gov.au/nsw/observations/index.shtml	http://www.bom.gov.au/nsw/observations/sydney.shtml	http://www.bom.gov.au/products/IDR713.loop.shtml
+http://www.bom.gov.au/vic/observations/index.shtml	http://www.bom.gov.au/nsw/observations/melbourne.shtml	http://www.bom.gov.au/products/ID023.loop.shtml
+http://www.bom.gov.au/qld/observations/index.shtml	http://www.bom.gov.au/qld/observations/brisbane.shtml	http://www.bom.gov.au/products/IDR663.loop.shtml
+http://www.bom.gov.au/wa/observations/index.shtml	http://www.bom.gov.au/wa/observations/perth.shtml	http://www.bom.gov.au/products/IDR703.loop.shtml
+http://www.bom.gov.au/sa/observations/index.shtml	http://www.bom.gov.au/sa/observations/adelaide.shtml	http://www.bom.gov.au/products/IDR643.loop.shtml
+http://www.bom.gov.au/tas/observations/index.shtml	http://www.bom.gov.au/tas/observations/hobart.shtml	http://www.bom.gov.au/products/IDR763.loop.shtml
+http://www.bom.gov.au/act/observations/index.shtml	http://www.bom.gov.au/act/observations/canberra.shtml	http://www.bom.gov.au/products/IDR403.loop.shtml
+http://www.bom.gov.au/nt/observations/index.shtml	http://www.bom.gov.au/nt/observations/darwin.shtml	http://www.bom.gov.au/products/IDR633.loop.shtml
+
+http://www.bom.gov.au/australia/radar/	http://www.bom.gov.au/products/IDR713.loop.shtml	http://www.bom.gov.au/products/IDR023.loop.shtml	http://www.bom.gov.au/products/IDR663.loop.shtml	http://www.bom.gov.au/products/IDR703.loop.shtml	http://www.bom.gov.au/products/IDR643.loop.shtml	http://www.bom.gov.au/products/IDR763.loop.shtml	http://www.bom.gov.au/products/IDR403.loop.shtml	http://www.bom.gov.au/products/IDR663.loop.shtml
+http://www.bom.gov.au/products/IDR713.loop.shtml	http://www.bom.gov.au/australia/radar/ 
+http://www.bom.gov.au/products/IDR023.loop.shtml	http://www.bom.gov.au/australia/radar/ 
+http://www.bom.gov.au/products/IDR663.loop.shtml	http://www.bom.gov.au/australia/radar/ 
+http://www.bom.gov.au/products/IDR703.loop.shtml	http://www.bom.gov.au/australia/radar/ 
+http://www.bom.gov.au/products/IDR643.loop.shtml	http://www.bom.gov.au/australia/radar/ 
+http://www.bom.gov.au/products/IDR763.loop.shtml	http://www.bom.gov.au/australia/radar/ 
+http://www.bom.gov.au/products/IDR403.loop.shtml	http://www.bom.gov.au/australia/radar/ 
+http://www.bom.gov.au/products/IDR663.loop.shtmlhttp://www.bom.gov.au/australia/radar/ 
+
+http://www.bom.gov.au/australia/satellite/	http://www.bom.gov.au/
+http://www.bom.gov.au/australia/charts/		http://www.bom.gov.au/
+http://www.bom.gov.au/australia/meteye/		http://www.bom.gov.au/

@@ -1,0 +1,1 @@
+HBASE_ROW_KEY,col:Transaction_date,col:Product,col:Price,col:Payment_Type,col:Name,col:City,col:State,col:Country,col:Account_Created,col:Last_Login,col:Latitude,col:Longitude

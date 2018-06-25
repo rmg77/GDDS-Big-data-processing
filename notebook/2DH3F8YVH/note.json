@@ -1,0 +1,393 @@
+{
+  "paragraphs": [
+    {
+      "text": "// Basic logistic regression example from Alexandria, Module 6.2.1.1\nimport org.apache.spark.ml.classification.LogisticRegression\nimport org.apache.spark.ml.linalg.{Vector, Vectors}\nimport org.apache.spark.ml.param.ParamMap\nimport org.apache.spark.sql.Row\n\n// ***Create training data - a small synthetic dataset\n// Prepare training data from a list of (label, features) tuples.\nval training \u003d spark.createDataFrame(Seq(\n    (1.0, Vectors.dense(0.0, 1.1, 0.1)),\n    (0.0, Vectors.dense(2.0, 1.0, -1.0)),\n    (0.0, Vectors.dense(2.0, 1.3, 1.0)),\n    (1.0, Vectors.dense(0.0, 1.2, -0.5))\n)).toDF(\"label\", \"features\")\n\n// Create a LogisticRegression instance. This instance is an Estimator.\nval lr \u003d new LogisticRegression()\n// Print out the parameters, documentation, and any default values.\nprintln(\"LogisticRegression parameters:\\n\" + lr.explainParams() + \"\\n\")\n// We may set parameters using setter methods.\nlr.setMaxIter(10).setRegParam(0.01)\n",
+      "user": "anonymous",
+      "dateUpdated": "Jun 12, 2018 9:02:44 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.ml.classification.LogisticRegression\nimport org.apache.spark.ml.linalg.{Vector, Vectors}\nimport org.apache.spark.ml.param.ParamMap\nimport org.apache.spark.sql.Row\ntraining: org.apache.spark.sql.DataFrame \u003d [label: double, features: vector]\nlr: org.apache.spark.ml.classification.LogisticRegression \u003d logreg_ee6f11ee2830\nLogisticRegression parameters:\naggregationDepth: suggested depth for treeAggregate (\u003e\u003d 2) (default: 2)\nelasticNetParam: the ElasticNet mixing parameter, in range [0, 1]. For alpha \u003d 0, the penalty is an L2 penalty. For alpha \u003d 1, it is an L1 penalty (default: 0.0)\nfamily: The name of family which is a description of the label distribution to be used in the model. Supported options: auto, binomial, multinomial. (default: auto)\nfeaturesCol: features column name (default: features)\nfitIntercept: whether to fit an intercept term (default: true)\nlabelCol: label column name (default: label)\nlowerBoundsOnCoefficients: The lower bounds on coefficients if fitting under bound constrained optimization. (undefined)\nlowerBoundsOnIntercepts: The lower bounds on intercepts if fitting under bound constrained optimization. (undefined)\nmaxIter: maximum number of iterations (\u003e\u003d 0) (default: 100)\npredictionCol: prediction column name (default: prediction)\nprobabilityCol: Column name for predicted class conditional probabilities. Note: Not all models output well-calibrated probability estimates! These probabilities should be treated as confidences, not precise probabilities (default: probability)\nrawPredictionCol: raw prediction (a.k.a. confidence) column name (default: rawPrediction)\nregParam: regularization parameter (\u003e\u003d 0) (default: 0.0)\nstandardization: whether to standardize the training features before fitting the model (default: true)\nthreshold: threshold in binary classification prediction, in range [0, 1] (default: 0.5)\nthresholds: Thresholds in multi-class classification to adjust the probability of predicting each class. Array must have length equal to the number of classes, with values \u003e 0 excepting that at most one value may be 0. The class with largest value p/t is predicted, where p is the original probability of that class and t is the class\u0027s threshold (undefined)\ntol: the convergence tolerance for iterative algorithms (\u003e\u003d 0) (default: 1.0E-6)\nupperBoundsOnCoefficients: The upper bounds on coefficients if fitting under bound constrained optimization. (undefined)\nupperBoundsOnIntercepts: The upper bounds on intercepts if fitting under bound constrained optimization. (undefined)\nweightCol: weight column name. If this is not set or empty, we treat all instance weights as 1.0 (undefined)\n\nres39: lr.type \u003d logreg_ee6f11ee2830\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528800562343_841750287",
+      "id": "20180612-204922_1035769740",
+      "dateCreated": "Jun 12, 2018 8:49:22 PM",
+      "dateStarted": "Jun 12, 2018 9:02:44 PM",
+      "dateFinished": "Jun 12, 2018 9:02:46 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// ***Training:\n// Learn a LogisticRegression model. This uses the parameters stored in lr.\nval model1 \u003d lr.fit(training)\n\n// We may alternatively specify parameters using a ParamMap,\n// which supports several methods for specifying parameters.\nval paramMap \u003d ParamMap(lr.maxIter -\u003e 20)\n    .put(lr.maxIter, 30)  // Specify 1 Param. This overwrites the original maxIter.\n    .put(lr.regParam -\u003e 0.1, lr.threshold -\u003e 0.55)  // Specify multiple Params.\n    \n// One can also combine ParamMaps.\nval paramMap2 \u003d ParamMap(lr.probabilityCol -\u003e \"myProbability\")  // Change output column name.\nval paramMapCombined \u003d paramMap ++ paramMap2\n// Now learn a new model using the paramMapCombined parameters.\n// paramMapCombined overrides all parameters set earlier via lr.set* methods.\nval model2 \u003d lr.fit(training, paramMapCombined)\nprintln(\"Model 2 was fit using parameters: \" + model2.parent.extractParamMap)\n",
+      "user": "anonymous",
+      "dateUpdated": "Jun 12, 2018 9:05:20 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "model1: org.apache.spark.ml.classification.LogisticRegressionModel \u003d logreg_ee6f11ee2830\nparamMap: org.apache.spark.ml.param.ParamMap \u003d\n{\n\tlogreg_ee6f11ee2830-maxIter: 30,\n\tlogreg_ee6f11ee2830-regParam: 0.1,\n\tlogreg_ee6f11ee2830-threshold: 0.55\n}\nparamMap2: org.apache.spark.ml.param.ParamMap \u003d\n{\n\tlogreg_ee6f11ee2830-probabilityCol: myProbability\n}\nparamMapCombined: org.apache.spark.ml.param.ParamMap \u003d\n{\n\tlogreg_ee6f11ee2830-maxIter: 30,\n\tlogreg_ee6f11ee2830-probabilityCol: myProbability,\n\tlogreg_ee6f11ee2830-regParam: 0.1,\n\tlogreg_ee6f11ee2830-threshold: 0.55\n}\nmodel2: org.apache.spark.ml.classification.LogisticRegressionModel \u003d logreg_ee6f11ee2830\nModel 2 was fit using parameters: {\n\tlogreg_ee6f11ee2830-aggregationDepth: 2,\n\tlogreg_ee6f11ee2830-elasticNetParam: 0.0,\n\tlogreg_ee6f11ee2830-family: auto,\n\tlogreg_ee6f11ee2830-featuresCol: features,\n\tlogreg_ee6f11ee2830-fitIntercept: true,\n\tlogreg_ee6f11ee2830-labelCol: label,\n\tlogreg_ee6f11ee2830-maxIter: 30,\n\tlogreg_ee6f11ee2830-predictionCol: prediction,\n\tlogreg_ee6f11ee2830-probabilityCol: myProbability,\n\tlogreg_ee6f11ee2830-rawPredictionCol: rawPrediction,\n\tlogreg_ee6f11ee2830-regParam: 0.1,\n\tlogreg_ee6f11ee2830-standardization: true,\n\tlogreg_ee6f11ee2830-threshold: 0.55,\n\tlogreg_ee6f11ee2830-tol: 1.0E-6\n}\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528801397945_945246620",
+      "id": "20180612-210317_714023380",
+      "dateCreated": "Jun 12, 2018 9:03:17 PM",
+      "dateStarted": "Jun 12, 2018 9:05:20 PM",
+      "dateFinished": "Jun 12, 2018 9:05:22 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// ***Testing:\n// Prepare test data.\nval test \u003d spark.createDataFrame(Seq(\n    (1.0, Vectors.dense(-1.0, 1.5, 1.3)),\n    (0.0, Vectors.dense(3.0, 2.0, -0.1)),\n    (1.0, Vectors.dense(0.0, 2.2, -1.5))\n)).toDF(\"label\", \"features\")\n\n// Make predictions on test data using the Transformer.transform() method.\n// LogisticRegression.transform will only use the \u0027features\u0027 column.\n// Note that model2.transform() outputs a \u0027myProbability\u0027 column instead of the usual\n// \u0027probability\u0027 column since we renamed the lr.probabilityCol parameter previously.\nmodel2.transform(test)\n    .select(\"features\", \"label\", \"myProbability\", \"prediction\")\n    .collect()\n    .foreach { case Row(features: Vector, label: Double, prob: Vector, prediction: Double) \u003d\u003e\n      println(s\"($features, $label) -\u003e prob\u003d$prob, prediction\u003d$prediction\")\n    }",
+      "user": "anonymous",
+      "dateUpdated": "Jun 12, 2018 9:05:43 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "test: org.apache.spark.sql.DataFrame \u003d [label: double, features: vector]\n([-1.0,1.5,1.3], 1.0) -\u003e prob\u003d[0.05707304171033977,0.9429269582896603], prediction\u003d1.0\n([3.0,2.0,-0.1], 0.0) -\u003e prob\u003d[0.9238522311704088,0.07614776882959128], prediction\u003d0.0\n([0.0,2.2,-1.5], 1.0) -\u003e prob\u003d[0.10972776114779119,0.8902722388522087], prediction\u003d1.0\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528801418081_730956807",
+      "id": "20180612-210338_1203643993",
+      "dateCreated": "Jun 12, 2018 9:03:38 PM",
+      "dateStarted": "Jun 12, 2018 9:05:43 PM",
+      "dateFinished": "Jun 12, 2018 9:05:44 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// ***A Text Processing Example - Alexandria Module 6.2.1.1\n// Perform logistic regression over a simple text dataset. Since logistic regression \n// only takes numeric values, we have to perform some data transformation to convert\n// the text datasets to a numeric form. There are many different approaches one can\n// take to perform such transformation. In this example, we use the widely used Term\n// Frequency technique.\n\n//start by importing needed classes\nimport org.apache.spark.ml.{Pipeline, PipelineModel}\nimport org.apache.spark.ml.classification.LogisticRegression\nimport org.apache.spark.ml.feature.{HashingTF, Tokenizer}\nimport org.apache.spark.ml.linalg.Vector\nimport org.apache.spark.sql.Row\n\n// Prepare training documents from a list of (id, text, label) tuples.\nval training \u003d spark.createDataFrame(Seq(\n    (0L, \"a b c d e spark\", 1.0),\n    (1L, \"b d\", 0.0),\n    (2L, \"spark f g h\", 1.0),\n    (3L, \"hadoop mapreduce\", 0.0)\n)).toDF(\"id\", \"text\", \"label\")",
+      "user": "anonymous",
+      "dateUpdated": "Jun 12, 2018 9:43:31 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.ml.{Pipeline, PipelineModel}\nimport org.apache.spark.ml.classification.LogisticRegression\nimport org.apache.spark.ml.feature.{HashingTF, Tokenizer}\nimport org.apache.spark.ml.linalg.Vector\nimport org.apache.spark.sql.Row\ntraining: org.apache.spark.sql.DataFrame \u003d [id: bigint, text: string ... 1 more field]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528802663091_-1095672796",
+      "id": "20180612-212423_292324069",
+      "dateCreated": "Jun 12, 2018 9:24:23 PM",
+      "dateStarted": "Jun 12, 2018 9:43:31 PM",
+      "dateFinished": "Jun 12, 2018 9:43:32 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// Configure an ML pipeline, which consists of three stages: tokenizer, hashingTF, and lr.\nval tokenizer \u003d new Tokenizer()\n    .setInputCol(\"text\")\n    .setOutputCol(\"words\")\nval hashingTF \u003d new HashingTF()\n    .setNumFeatures(1000)\n    .setInputCol(tokenizer.getOutputCol)\n    .setOutputCol(\"features\")\nval lr \u003d new LogisticRegression()\n    .setMaxIter(10)\n    .setRegParam(0.001)\nval pipeline \u003d new Pipeline()\n    .setStages(Array(tokenizer, hashingTF, lr))",
+      "user": "anonymous",
+      "dateUpdated": "Jun 12, 2018 9:43:46 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "tokenizer: org.apache.spark.ml.feature.Tokenizer \u003d tok_a2bf4f79b044\nhashingTF: org.apache.spark.ml.feature.HashingTF \u003d hashingTF_7529247eab2c\nlr: org.apache.spark.ml.classification.LogisticRegression \u003d logreg_787c406a0241\npipeline: org.apache.spark.ml.Pipeline \u003d pipeline_abd29a938755\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528803045533_-1136099910",
+      "id": "20180612-213045_1685247058",
+      "dateCreated": "Jun 12, 2018 9:30:45 PM",
+      "dateStarted": "Jun 12, 2018 9:43:46 PM",
+      "dateFinished": "Jun 12, 2018 9:43:47 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// Fit the pipeline to training documents.\nval model \u003d pipeline.fit(training)\n\n// Now we can optionally save the fitted pipeline to disk\nmodel.write.overwrite().save(\"~/week6/spark-logistic-regression-model\")\n// We can also save this unfit pipeline to disk\npipeline.write.overwrite().save(\"~/week6/unfit-lr-model\")\n// And load it back in during production\nval sameModel \u003d PipelineModel.load(\"~/week6/spark-logistic-regression-model\")",
+      "user": "anonymous",
+      "dateUpdated": "Jun 12, 2018 9:47:50 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "model: org.apache.spark.ml.PipelineModel \u003d pipeline_abd29a938755\nsameModel: org.apache.spark.ml.PipelineModel \u003d pipeline_abd29a938755\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528803833202_851831426",
+      "id": "20180612-214353_868118308",
+      "dateCreated": "Jun 12, 2018 9:43:53 PM",
+      "dateStarted": "Jun 12, 2018 9:47:50 PM",
+      "dateFinished": "Jun 12, 2018 9:47:57 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// Prepare test documents, which are unlabeled (id, text) tuples.\nval test \u003d spark.createDataFrame(Seq(\n    (4L, \"spark i j k\"),\n    (5L, \"l m n\"),\n    (6L, \"spark hadoop spark\"),\n    (7L, \"apache hadoop\")\n)).toDF(\"id\", \"text\")\n\n// Make predictions on test documents.\nmodel.transform(test)\n    .select(\"id\", \"text\", \"probability\", \"prediction\")\n    .collect()\n    .foreach { case Row(id: Long, text: String, prob: Vector, prediction: Double) \u003d\u003e\n      println(s\"($id, $text) --\u003e prob\u003d$prob, prediction\u003d$prediction\")\n    }\n",
+      "user": "anonymous",
+      "dateUpdated": "Jun 12, 2018 9:51:16 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "test: org.apache.spark.sql.DataFrame \u003d [id: bigint, text: string]\n(4, spark i j k) --\u003e prob\u003d[0.15964077387874118,0.8403592261212589], prediction\u003d1.0\n(5, l m n) --\u003e prob\u003d[0.8378325685476612,0.16216743145233875], prediction\u003d0.0\n(6, spark hadoop spark) --\u003e prob\u003d[0.06926633132976273,0.9307336686702373], prediction\u003d1.0\n(7, apache hadoop) --\u003e prob\u003d[0.9821575333444208,0.01784246665557917], prediction\u003d0.0\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528804092592_1878136820",
+      "id": "20180612-214812_1224080219",
+      "dateCreated": "Jun 12, 2018 9:48:12 PM",
+      "dateStarted": "Jun 12, 2018 9:51:16 PM",
+      "dateFinished": "Jun 12, 2018 9:51:18 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "model.transform(test)\n    .select(\"id\", \"text\", \"probability\", \"prediction\")\n    .collect()",
+      "user": "anonymous",
+      "dateUpdated": "Jun 12, 2018 9:53:23 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "res80: Array[org.apache.spark.sql.Row] \u003d Array([4,spark i j k,[0.15964077387874118,0.8403592261212589],1.0], [5,l m n,[0.8378325685476612,0.16216743145233875],0.0], [6,spark hadoop spark,[0.06926633132976273,0.9307336686702373],1.0], [7,apache hadoop,[0.9821575333444208,0.01784246665557917],0.0])\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528804386892_204877533",
+      "id": "20180612-215306_156453714",
+      "dateCreated": "Jun 12, 2018 9:53:06 PM",
+      "dateStarted": "Jun 12, 2018 9:53:23 PM",
+      "dateFinished": "Jun 12, 2018 9:53:23 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import org.apache.spark.ml.regression.LinearRegression\n\n// Load training data\nval training \u003d spark.read.format(\"libsvm\")\n  .load(\"/srv/home/rgai0001/spark-2.2.1-bin-hadoop2.7/data/mllib/sample_linear_regression_data.txt\")\ntraining.printSchema()\n\nval lr \u003d new LinearRegression()\n  .setMaxIter(10)\n  .setRegParam(0.3)\n  .setElasticNetParam(0.8)\n\n// Fit the model\nval lrModel \u003d lr.fit(training)\n\n// Print the coefficients and intercept for linear regression\nprintln(s\"Coefficients: ${lrModel.coefficients} Intercept: ${lrModel.intercept}\")\n\n// Summarize the model over the training set and print out some metrics\nval trainingSummary \u003d lrModel.summary\nprintln(s\"numIterations: ${trainingSummary.totalIterations}\")\nprintln(s\"objectiveHistory: [${trainingSummary.objectiveHistory.mkString(\",\")}]\")\ntrainingSummary.residuals.show()\nprintln(s\"RMSE: ${trainingSummary.rootMeanSquaredError}\")\nprintln(s\"r2: ${trainingSummary.r2}\")",
+      "user": "anonymous",
+      "dateUpdated": "Jun 18, 2018 5:29:47 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.ml.regression.LinearRegression\ntraining: org.apache.spark.sql.DataFrame \u003d [label: double, features: vector]\nroot\n |-- label: double (nullable \u003d true)\n |-- features: vector (nullable \u003d true)\n\nlr: org.apache.spark.ml.regression.LinearRegression \u003d linReg_42d67f18307d\nlrModel: org.apache.spark.ml.regression.LinearRegressionModel \u003d linReg_42d67f18307d\nCoefficients: [0.0,0.32292516677405936,-0.3438548034562218,1.9156017023458414,0.05288058680386263,0.765962720459771,0.0,-0.15105392669186682,-0.21587930360904642,0.22025369188813426] Intercept: 0.1598936844239736\ntrainingSummary: org.apache.spark.ml.regression.LinearRegressionTrainingSummary \u003d org.apache.spark.ml.regression.LinearRegressionTrainingSummary@65df9e1b\nnumIterations: 7\nobjectiveHistory: [0.49999999999999994,0.4967620357443381,0.4936361664340463,0.4936351537897608,0.4936351214177871,0.49363512062528014,0.4936351206216114]\n+--------------------+\n|           residuals|\n+--------------------+\n|  -9.889232683103197|\n|  0.5533794340053554|\n|  -5.204019455758823|\n| -20.566686715507508|\n|    -9.4497405180564|\n|  -6.909112502719486|\n|  -10.00431602969873|\n|   2.062397807050484|\n|  3.1117508432954772|\n| -15.893608229419382|\n|  -5.036284254673026|\n|   6.483215876994333|\n|  12.429497299109002|\n|  -20.32003219007654|\n| -2.0049838218725005|\n| -17.867901734183793|\n|   7.646455887420495|\n| -2.2653482182417406|\n|-0.10308920436195645|\n|  -1.380034070385301|\n+--------------------+\nonly showing top 20 rows\n\nRMSE: 10.189077167598475\nr2: 0.022861466913958184\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528801216599_791687481",
+      "id": "20180612-210016_333153365",
+      "dateCreated": "Jun 12, 2018 9:00:16 PM",
+      "dateStarted": "Jun 18, 2018 5:29:47 PM",
+      "dateFinished": "Jun 18, 2018 5:29:52 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "training.show(10)\ntraining.collect()",
+      "user": "anonymous",
+      "dateUpdated": "Jun 18, 2018 5:38:34 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+-------------------+--------------------+\n|              label|            features|\n+-------------------+--------------------+\n| -9.490009878824548|(10,[0,1,2,3,4,5,...|\n| 0.2577820163584905|(10,[0,1,2,3,4,5,...|\n| -4.438869807456516|(10,[0,1,2,3,4,5,...|\n|-19.782762789614537|(10,[0,1,2,3,4,5,...|\n| -7.966593841555266|(10,[0,1,2,3,4,5,...|\n| -7.896274316726144|(10,[0,1,2,3,4,5,...|\n| -8.464803554195287|(10,[0,1,2,3,4,5,...|\n| 2.1214592666251364|(10,[0,1,2,3,4,5,...|\n| 1.0720117616524107|(10,[0,1,2,3,4,5,...|\n|-13.772441561702871|(10,[0,1,2,3,4,5,...|\n+-------------------+--------------------+\nonly showing top 10 rows\n\nres41: Array[org.apache.spark.sql.Row] \u003d Array([-9.490009878824548,(10,[0,1,2,3,4,5,6,7,8,9],[0.4551273600657362,0.36644694351969087,-0.38256108933468047,-0.4458430198517267,0.33109790358914726,0.8067445293443565,-0.2624341731773887,-0.44850386111659524,-0.07269284838169332,0.5658035575800715])], [0.2577820163584905,(10,[0,1,2,3,4,5,6,7,8,9],[0.8386555657374337,-0.1270180511534269,0.499812362510895,-0.22686625128130267,-0.6452430441812433,0.18869982177936828,-0.5804648622673358,0.651931743775642,-0.6555641246242951,0.17485476357259122])], [-4.438869807456516,(10,[0,1,2,3,4,5,6,7,8,9],[0.5025608135349202,0.14208069682973434,0.16004976900412138,0.505019897181302,-0.9371635223468384,-0.2841601610457427,0.6355938616712786,-0.1646249064941625,0.9480713629917628,0.42681251564645817])], [-19.7..."
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1529306987109_1149766358",
+      "id": "20180618-172947_181115118",
+      "dateCreated": "Jun 18, 2018 5:29:47 PM",
+      "dateStarted": "Jun 18, 2018 5:38:34 PM",
+      "dateFinished": "Jun 18, 2018 5:38:35 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "user": "anonymous",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1529307086296_-269417448",
+      "id": "20180618-173126_751239043",
+      "dateCreated": "Jun 18, 2018 5:31:26 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "machine-learning",
+  "id": "2DH3F8YVH",
+  "angularObjects": {
+    "2CY4SB1H5:shared_process": [],
+    "2CXC618EC:shared_process": [],
+    "2CYVBGAMQ:shared_process": [],
+    "2CY3Y61TM:shared_process": [],
+    "2CXRH3T8B:shared_process": [],
+    "2CXTQKGUW:shared_process": [],
+    "2CXCNM6ZT:shared_process": [],
+    "2CXZADFKB:shared_process": [],
+    "2CUZKD23K:shared_process": [],
+    "2CVM42UGQ:shared_process": [],
+    "2CVPRSQB6:shared_process": [],
+    "2CYHQDYMU:shared_process": [],
+    "2CVV5NFCM:shared_process": [],
+    "2CW23H68H:shared_process": [],
+    "2CY8N5QUM:shared_process": [],
+    "2CVTBZ9KW:shared_process": [],
+    "2CWGDUPZW:shared_process": [],
+    "2CVKDDERZ:shared_process": [],
+    "2CYGMRJ4Q:shared_process": []
+  },
+  "config": {},
+  "info": {}
+}

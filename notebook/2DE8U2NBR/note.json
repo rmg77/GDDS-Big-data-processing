@@ -1,0 +1,659 @@
+{
+  "paragraphs": [
+    {
+      "text": "import sqlContext.implicits._\n\n// Test reading in a data frame - first read in a very small file\nval df \u003d spark.read.option(\"header\", \"true\").csv(\"/srv/home/rgai0001/week5/small.csv\")\ndf.printSchema()\ndf.show()\n\nprintln(\"Column averages:\")\ndf.columns.foreach {\n    columnHeader \u003d\u003e {\n        df.select(avg(columnHeader)).show()\n        //df.select(mean(df(columnHeader))).show()\n    }\n}",
+      "user": "anonymous",
+      "dateUpdated": "Jun 18, 2018 12:28:20 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "df: org.apache.spark.sql.DataFrame \u003d [a: string, b: string ... 2 more fields]\nroot\n |-- a: string (nullable \u003d true)\n |-- b: string (nullable \u003d true)\n |-- c: string (nullable \u003d true)\n |-- d: string (nullable \u003d true)\n\n+---+---+---+---+\n|  a|  b|  c|  d|\n+---+---+---+---+\n|  1|  2|  3|  4|\n|  1|  4|  5|  9|\n|  8|  6|  7|  8|\n|  7|  2|  0|  1|\n|  5|  6|  7|  8|\n|  5|  0|  1|  2|\n+---+---+---+---+\n\nColumn averages:\n+------+\n|avg(a)|\n+------+\n|   4.5|\n+------+\n\n+------------------+\n|            avg(b)|\n+------------------+\n|3.3333333333333335|\n+------------------+\n\n+------------------+\n|            avg(c)|\n+------------------+\n|3.8333333333333335|\n+------------------+\n\n+-----------------+\n|           avg(d)|\n+-----------------+\n|5.333333333333333|\n+-----------------+\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528532804186_-1892201207",
+      "id": "20180609-182644_805661365",
+      "dateCreated": "Jun 9, 2018 6:26:44 PM",
+      "dateStarted": "Jun 18, 2018 12:27:47 PM",
+      "dateFinished": "Jun 18, 2018 12:27:48 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "//df.sort($\"a\").show()\n//df.sort($\"a\", $\"b\".desc).show()\ndf.orderBy(\"a\").show()\ndf.orderBy(\"a\", \"b\").show()",
+      "user": "anonymous",
+      "dateUpdated": "Jun 18, 2018 12:28:23 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+---+---+---+---+\n|  a|  b|  c|  d|\n+---+---+---+---+\n|  1|  4|  5|  9|\n|  1|  2|  3|  4|\n|  5|  6|  7|  8|\n|  5|  0|  1|  2|\n|  7|  2|  0|  1|\n|  8|  6|  7|  8|\n+---+---+---+---+\n\n+---+---+---+---+\n|  a|  b|  c|  d|\n+---+---+---+---+\n|  1|  2|  3|  4|\n|  1|  4|  5|  9|\n|  5|  0|  1|  2|\n|  5|  6|  7|  8|\n|  7|  2|  0|  1|\n|  8|  6|  7|  8|\n+---+---+---+---+\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1529288276486_-1010776176",
+      "id": "20180618-121756_593303982",
+      "dateCreated": "Jun 18, 2018 12:17:56 PM",
+      "dateStarted": "Jun 18, 2018 12:28:23 PM",
+      "dateFinished": "Jun 18, 2018 12:28:24 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// Spark dataframe programming challenge from Week 5 slides\n\n//val df \u003d sqlContext.read.format(\"csv\").option(\"inferSchema\", \"true\").load(\"~/ass4/test.csv.bz2\")\nval df1 \u003d spark.read.option(\"header\",\"true\").option(\"delimiter\", \";\").csv(\"/srv/home/rgai0001/week5/winequality-red.csv\")\ndf1.printSchema()\n//df.columns",
+      "user": "anonymous",
+      "dateUpdated": "Jun 9, 2018 10:28:13 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "df1: org.apache.spark.sql.DataFrame \u003d [fixed acidity: string, volatile acidity: string ... 10 more fields]\nroot\n |-- fixed acidity: string (nullable \u003d true)\n |-- volatile acidity: string (nullable \u003d true)\n |-- citric acid: string (nullable \u003d true)\n |-- residual sugar: string (nullable \u003d true)\n |-- chlorides: string (nullable \u003d true)\n |-- free sulfur dioxide: string (nullable \u003d true)\n |-- total sulfur dioxide: string (nullable \u003d true)\n |-- density: string (nullable \u003d true)\n |-- pH: string (nullable \u003d true)\n |-- sulphates: string (nullable \u003d true)\n |-- alcohol: string (nullable \u003d true)\n |-- quality: string (nullable \u003d true)\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528511454930_-670065872",
+      "id": "20180609-123054_173664422",
+      "dateCreated": "Jun 9, 2018 12:30:54 PM",
+      "dateStarted": "Jun 9, 2018 10:28:13 PM",
+      "dateFinished": "Jun 9, 2018 10:28:14 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val df2 \u003d spark.read.option(\"header\",\"true\").option(\"delimiter\", \";\").csv(\"/srv/home/rgai0001/week5/winequality-white.csv\")\ndf2.printSchema()",
+      "user": "anonymous",
+      "dateUpdated": "Jun 9, 2018 10:28:24 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "df2: org.apache.spark.sql.DataFrame \u003d [fixed acidity: string, volatile acidity: string ... 10 more fields]\nroot\n |-- fixed acidity: string (nullable \u003d true)\n |-- volatile acidity: string (nullable \u003d true)\n |-- citric acid: string (nullable \u003d true)\n |-- residual sugar: string (nullable \u003d true)\n |-- chlorides: string (nullable \u003d true)\n |-- free sulfur dioxide: string (nullable \u003d true)\n |-- total sulfur dioxide: string (nullable \u003d true)\n |-- density: string (nullable \u003d true)\n |-- pH: string (nullable \u003d true)\n |-- sulphates: string (nullable \u003d true)\n |-- alcohol: string (nullable \u003d true)\n |-- quality: string (nullable \u003d true)\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528547194357_1804876247",
+      "id": "20180609-222634_710115178",
+      "dateCreated": "Jun 9, 2018 10:26:34 PM",
+      "dateStarted": "Jun 9, 2018 10:28:24 PM",
+      "dateFinished": "Jun 9, 2018 10:28:24 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// calculate mean of each column\ndf1.columns.foreach {\n    columnHeader \u003d\u003e {\n        df.select(avg(columnHeader)).show()\n    }\n}",
+      "user": "anonymous",
+      "dateUpdated": "Jun 9, 2018 10:44:11 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+------------------+\n|avg(fixed acidity)|\n+------------------+\n| 8.319637273295838|\n+------------------+\n\n+---------------------+\n|avg(volatile acidity)|\n+---------------------+\n|   0.5278205128205131|\n+---------------------+\n\n+------------------+\n|  avg(citric acid)|\n+------------------+\n|0.2709756097560964|\n+------------------+\n\n+-------------------+\n|avg(residual sugar)|\n+-------------------+\n| 2.5388055034396517|\n+-------------------+\n\n+-------------------+\n|     avg(chlorides)|\n+-------------------+\n|0.08746654158849257|\n+-------------------+\n\n+------------------------+\n|avg(free sulfur dioxide)|\n+------------------------+\n|      15.874921826141339|\n+------------------------+\n\n+-------------------------+\n|avg(total sulfur dioxide)|\n+-------------------------+\n|        46.46779237023139|\n+-------------------------+\n\n+------------------+\n|      avg(density)|\n+------------------+\n|0.9967466791744831|\n+------------------+\n\n+-----------------+\n|          avg(pH)|\n+-----------------+\n|3.311113195747343|\n+-----------------+\n\n+------------------+\n|    avg(sulphates)|\n+------------------+\n|0.6581488430268921|\n+------------------+\n\n+------------------+\n|      avg(alcohol)|\n+------------------+\n|10.422983114446502|\n+------------------+\n\n+------------------+\n|      avg(quality)|\n+------------------+\n|5.6360225140712945|\n+------------------+\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528546990640_-1104734497",
+      "id": "20180609-222310_1622588425",
+      "dateCreated": "Jun 9, 2018 10:23:10 PM",
+      "dateStarted": "Jun 9, 2018 10:28:35 PM",
+      "dateFinished": "Jun 9, 2018 10:28:36 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// calculate standard deviation of each column (I use sample stdev)\nimport org.apache.spark.sql.functions.{stddev_samp, stddev_pop}\ndf1.columns.foreach {\n    columnHeader \u003d\u003e {\n        df.select(stddev_pop(columnHeader)).show()\n    }\n}\n//selectedData.groupBy($\"user\").agg(stdev_pop($\"duration\"))",
+      "user": "anonymous",
+      "dateUpdated": "Jun 9, 2018 10:44:20 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.sql.functions.{stddev_samp, stddev_pop}\n+-------------------------+\n|stddev_pop(fixed acidity)|\n+-------------------------+\n|       1.7405518001102724|\n+-------------------------+\n\n+----------------------------+\n|stddev_pop(volatile acidity)|\n+----------------------------+\n|         0.17900370424469003|\n+----------------------------+\n\n+-----------------------+\n|stddev_pop(citric acid)|\n+-----------------------+\n|    0.19474021445233328|\n+-----------------------+\n\n+--------------------------+\n|stddev_pop(residual sugar)|\n+--------------------------+\n|          1.40948711248805|\n+--------------------------+\n\n+---------------------+\n|stddev_pop(chlorides)|\n+---------------------+\n|  0.04705058260331569|\n+---------------------+\n\n+-------------------------------+\n|stddev_pop(free sulfur dioxide)|\n+-------------------------------+\n|             10.456885614930702|\n+-------------------------------+\n\n+--------------------------------+\n|stddev_pop(total sulfur dioxide)|\n+--------------------------------+\n|              32.885036651783736|\n+--------------------------------+\n\n+--------------------+\n| stddev_pop(density)|\n+--------------------+\n|0.001886743700832...|\n+--------------------+\n\n+------------------+\n|    stddev_pop(pH)|\n+------------------+\n|0.1543381814106016|\n+------------------+\n\n+---------------------+\n|stddev_pop(sulphates)|\n+---------------------+\n|  0.16945396724179562|\n+---------------------+\n\n+-------------------+\n|stddev_pop(alcohol)|\n+-------------------+\n| 1.0653343003437472|\n+-------------------+\n\n+-------------------+\n|stddev_pop(quality)|\n+-------------------+\n| 0.8073168769639515|\n+-------------------+\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528547699706_181339869",
+      "id": "20180609-223459_1856535683",
+      "dateCreated": "Jun 9, 2018 10:34:59 PM",
+      "dateStarted": "Jun 9, 2018 10:37:35 PM",
+      "dateFinished": "Jun 9, 2018 10:37:36 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// summary statistics\ndf1.describe().show()",
+      "user": "anonymous",
+      "dateUpdated": "Jun 9, 2018 10:44:30 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+-------+------------------+-------------------+-------------------+------------------+--------------------+-------------------+--------------------+--------------------+-------------------+------------------+------------------+------------------+\n|summary|     fixed acidity|   volatile acidity|        citric acid|    residual sugar|           chlorides|free sulfur dioxide|total sulfur dioxide|             density|                 pH|         sulphates|           alcohol|           quality|\n+-------+------------------+-------------------+-------------------+------------------+--------------------+-------------------+--------------------+--------------------+-------------------+------------------+------------------+------------------+\n|  count|              1599|               1599|               1599|              1599|                1599|               1599|                1599|                1599|               1599|              1599|              1599|              1599|\n|   mean| 8.319637273295838| 0.5278205128205131| 0.2709756097560964|2.5388055034396517| 0.08746654158849257| 15.874921826141339|   46.46779237023139|  0.9967466791744831|  3.311113195747343|0.6581488430268921|10.422983114446502|5.6360225140712945|\n| stddev|1.7410963181276948|0.17905970415353525|0.19480113740531824|  1.40992805950728|0.047065302010090085|  10.46015696980971|   32.89532447829907|0.001887333953842...|0.15438646490354271|0.1695069795901101|1.0656675818473935|0.8075694397347051|\n|    min|                10|               0.12|                  0|               0.9|               0.012|                  1|                  10|             0.99007|               2.74|              0.33|                10|                 3|\n|    max|               9.9|               1.58|                  1|                 9|               0.611|                  9|                  99|             1.00369|               4.01|               2.0|              9.95|                 8|\n+-------+------------------+-------------------+-------------------+------------------+--------------------+-------------------+--------------------+--------------------+-------------------+------------------+------------------+------------------+\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528547010311_-329804240",
+      "id": "20180609-222330_1862652356",
+      "dateCreated": "Jun 9, 2018 10:23:30 PM",
+      "dateStarted": "Jun 9, 2018 10:28:43 PM",
+      "dateFinished": "Jun 9, 2018 10:28:43 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "df2.describe().show",
+      "user": "anonymous",
+      "dateUpdated": "Jun 9, 2018 10:29:04 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+-------+------------------+-------------------+-------------------+-----------------+--------------------+-------------------+--------------------+--------------------+-------------------+-------------------+------------------+------------------+\n|summary|     fixed acidity|   volatile acidity|        citric acid|   residual sugar|           chlorides|free sulfur dioxide|total sulfur dioxide|             density|                 pH|          sulphates|           alcohol|           quality|\n+-------+------------------+-------------------+-------------------+-----------------+--------------------+-------------------+--------------------+--------------------+-------------------+-------------------+------------------+------------------+\n|  count|              4898|               4898|               4898|             4898|                4898|               4898|                4898|                4898|               4898|               4898|              4898|              4898|\n|   mean| 6.854787668436075|0.27824111882401087|0.33419150673743736|6.391414863209486|  0.0457723560636995|  35.30808493262556|  138.36065741118824|  0.9940273764801896| 3.1882666394446693| 0.4898468762760325|10.514267047774638|  5.87790935075541|\n| stddev|0.8438682276875127|0.10079454842486532|0.12101980420298254|5.072057784014878|0.021847968093728805|  17.00713732523259|  42.498064554142985|0.002990906916936997|0.15100059961506673|0.11412583394883222|  1.23062056775732|0.8856385749678322|\n|    min|                10|               0.08|                  0|              0.6|               0.009|                 10|                  10|             0.98711|               2.72|               0.22|                10|                 3|\n|    max|               9.9|                1.1|               1.66|              9.9|               0.346|                 98|                  99|             1.03898|               3.82|               1.08|               9.9|                 9|\n+-------+------------------+-------------------+-------------------+-----------------+--------------------+-------------------+--------------------+--------------------+-------------------+-------------------+------------------+------------------+\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528547254370_61053025",
+      "id": "20180609-222734_128249863",
+      "dateCreated": "Jun 9, 2018 10:27:34 PM",
+      "dateStarted": "Jun 9, 2018 10:29:04 PM",
+      "dateFinished": "Jun 9, 2018 10:29:05 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// add a column to each dataframe\nimport org.apache.spark.sql.functions.lit\nval dfRed \u003d df1.withColumn(\"type\", lit(\"red\"))\ndfRed.show()",
+      "user": "anonymous",
+      "dateUpdated": "Jun 9, 2018 11:09:16 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.sql.functions.lit\ndfRed: org.apache.spark.sql.DataFrame \u003d [fixed acidity: string, volatile acidity: string ... 11 more fields]\n+-------------+----------------+-----------+--------------+---------+-------------------+--------------------+-------+----+---------+-------+-------+----+\n|fixed acidity|volatile acidity|citric acid|residual sugar|chlorides|free sulfur dioxide|total sulfur dioxide|density|  pH|sulphates|alcohol|quality|type|\n+-------------+----------------+-----------+--------------+---------+-------------------+--------------------+-------+----+---------+-------+-------+----+\n|          7.4|             0.7|          0|           1.9|    0.076|                 11|                  34| 0.9978|3.51|     0.56|    9.4|      5| red|\n|          7.8|            0.88|          0|           2.6|    0.098|                 25|                  67| 0.9968| 3.2|     0.68|    9.8|      5| red|\n|          7.8|            0.76|       0.04|           2.3|    0.092|                 15|                  54|  0.997|3.26|     0.65|    9.8|      5| red|\n|         11.2|            0.28|       0.56|           1.9|    0.075|                 17|                  60|  0.998|3.16|     0.58|    9.8|      6| red|\n|          7.4|             0.7|          0|           1.9|    0.076|                 11|                  34| 0.9978|3.51|     0.56|    9.4|      5| red|\n|          7.4|            0.66|          0|           1.8|    0.075|                 13|                  40| 0.9978|3.51|     0.56|    9.4|      5| red|\n|          7.9|             0.6|       0.06|           1.6|    0.069|                 15|                  59| 0.9964| 3.3|     0.46|    9.4|      5| red|\n|          7.3|            0.65|          0|           1.2|    0.065|                 15|                  21| 0.9946|3.39|     0.47|     10|      7| red|\n|          7.8|            0.58|       0.02|             2|    0.073|                  9|                  18| 0.9968|3.36|     0.57|    9.5|      7| red|\n|          7.5|             0.5|       0.36|           6.1|    0.071|                 17|                 102| 0.9978|3.35|      0.8|   10.5|      5| red|\n|          6.7|            0.58|       0.08|           1.8|    0.097|                 15|                  65| 0.9959|3.28|     0.54|    9.2|      5| red|\n|          7.5|             0.5|       0.36|           6.1|    0.071|                 17|                 102| 0.9978|3.35|      0.8|   10.5|      5| red|\n|          5.6|           0.615|          0|           1.6|    0.089|                 16|                  59| 0.9943|3.58|     0.52|    9.9|      5| red|\n|          7.8|            0.61|       0.29|           1.6|    0.114|                  9|                  29| 0.9974|3.26|     1.56|    9.1|      5| red|\n|          8.9|            0.62|       0.18|           3.8|    0.176|                 52|                 145| 0.9986|3.16|     0.88|    9.2|      5| red|\n|          8.9|            0.62|       0.19|           3.9|     0.17|                 51|                 148| 0.9986|3.17|     0.93|    9.2|      5| red|\n|          8.5|            0.28|       0.56|           1.8|    0.092|                 35|                 103| 0.9969| 3.3|     0.75|   10.5|      7| red|\n|          8.1|            0.56|       0.28|           1.7|    0.368|                 16|                  56| 0.9968|3.11|     1.28|    9.3|      5| red|\n|          7.4|            0.59|       0.08|           4.4|    0.086|                  6|                  29| 0.9974|3.38|      0.5|      9|      4| red|\n|          7.9|            0.32|       0.51|           1.8|    0.341|                 17|                  56| 0.9969|3.04|     1.08|    9.2|      6| red|\n+-------------+----------------+-----------+--------------+---------+-------------------+--------------------+-------+----+---------+-------+-------+----+\nonly showing top 20 rows\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528548453614_1387612514",
+      "id": "20180609-224733_1830128604",
+      "dateCreated": "Jun 9, 2018 10:47:33 PM",
+      "dateStarted": "Jun 9, 2018 11:08:21 PM",
+      "dateFinished": "Jun 9, 2018 11:08:21 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// now for the white wine dataframe\nval dfWhite \u003d df2.withColumn(\"type\", lit(\"white\"))\ndfWhite.show()",
+      "user": "anonymous",
+      "dateUpdated": "Jun 9, 2018 11:09:59 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "dfWhite: org.apache.spark.sql.DataFrame \u003d [fixed acidity: string, volatile acidity: string ... 11 more fields]\n+-------------+----------------+-----------+--------------+---------+-------------------+--------------------+-------+----+---------+-------+-------+-----+\n|fixed acidity|volatile acidity|citric acid|residual sugar|chlorides|free sulfur dioxide|total sulfur dioxide|density|  pH|sulphates|alcohol|quality| type|\n+-------------+----------------+-----------+--------------+---------+-------------------+--------------------+-------+----+---------+-------+-------+-----+\n|            7|            0.27|       0.36|          20.7|    0.045|                 45|                 170|  1.001|   3|     0.45|    8.8|      6|white|\n|          6.3|             0.3|       0.34|           1.6|    0.049|                 14|                 132|  0.994| 3.3|     0.49|    9.5|      6|white|\n|          8.1|            0.28|        0.4|           6.9|     0.05|                 30|                  97| 0.9951|3.26|     0.44|   10.1|      6|white|\n|          7.2|            0.23|       0.32|           8.5|    0.058|                 47|                 186| 0.9956|3.19|      0.4|    9.9|      6|white|\n|          7.2|            0.23|       0.32|           8.5|    0.058|                 47|                 186| 0.9956|3.19|      0.4|    9.9|      6|white|\n|          8.1|            0.28|        0.4|           6.9|     0.05|                 30|                  97| 0.9951|3.26|     0.44|   10.1|      6|white|\n|          6.2|            0.32|       0.16|             7|    0.045|                 30|                 136| 0.9949|3.18|     0.47|    9.6|      6|white|\n|            7|            0.27|       0.36|          20.7|    0.045|                 45|                 170|  1.001|   3|     0.45|    8.8|      6|white|\n|          6.3|             0.3|       0.34|           1.6|    0.049|                 14|                 132|  0.994| 3.3|     0.49|    9.5|      6|white|\n|          8.1|            0.22|       0.43|           1.5|    0.044|                 28|                 129| 0.9938|3.22|     0.45|     11|      6|white|\n|          8.1|            0.27|       0.41|          1.45|    0.033|                 11|                  63| 0.9908|2.99|     0.56|     12|      5|white|\n|          8.6|            0.23|        0.4|           4.2|    0.035|                 17|                 109| 0.9947|3.14|     0.53|    9.7|      5|white|\n|          7.9|            0.18|       0.37|           1.2|     0.04|                 16|                  75|  0.992|3.18|     0.63|   10.8|      5|white|\n|          6.6|            0.16|        0.4|           1.5|    0.044|                 48|                 143| 0.9912|3.54|     0.52|   12.4|      7|white|\n|          8.3|            0.42|       0.62|         19.25|     0.04|                 41|                 172| 1.0002|2.98|     0.67|    9.7|      5|white|\n|          6.6|            0.17|       0.38|           1.5|    0.032|                 28|                 112| 0.9914|3.25|     0.55|   11.4|      7|white|\n|          6.3|            0.48|       0.04|           1.1|    0.046|                 30|                  99| 0.9928|3.24|     0.36|    9.6|      6|white|\n|          6.2|            0.66|       0.48|           1.2|    0.029|                 29|                  75| 0.9892|3.33|     0.39|   12.8|      8|white|\n|          7.4|            0.34|       0.42|           1.1|    0.033|                 17|                 171| 0.9917|3.12|     0.53|   11.3|      6|white|\n|          6.5|            0.31|       0.14|           7.5|    0.044|                 34|                 133| 0.9955|3.22|      0.5|    9.5|      5|white|\n+-------------+----------------+-----------+--------------+---------+-------------------+--------------------+-------+----+---------+-------+-------+-----+\nonly showing top 20 rows\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528549722341_262786210",
+      "id": "20180609-230842_2058690070",
+      "dateCreated": "Jun 9, 2018 11:08:42 PM",
+      "dateStarted": "Jun 9, 2018 11:09:59 PM",
+      "dateFinished": "Jun 9, 2018 11:09:59 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// merge the two dataframes\nval dfMerge \u003d dfRed.union(dfWhite)\ndfMerge.show()",
+      "user": "anonymous",
+      "dateUpdated": "Jun 9, 2018 11:15:04 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "dfMerge: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] \u003d [fixed acidity: string, volatile acidity: string ... 11 more fields]\n+-------------+----------------+-----------+--------------+---------+-------------------+--------------------+-------+----+---------+-------+-------+----+\n|fixed acidity|volatile acidity|citric acid|residual sugar|chlorides|free sulfur dioxide|total sulfur dioxide|density|  pH|sulphates|alcohol|quality|type|\n+-------------+----------------+-----------+--------------+---------+-------------------+--------------------+-------+----+---------+-------+-------+----+\n|          7.4|             0.7|          0|           1.9|    0.076|                 11|                  34| 0.9978|3.51|     0.56|    9.4|      5| red|\n|          7.8|            0.88|          0|           2.6|    0.098|                 25|                  67| 0.9968| 3.2|     0.68|    9.8|      5| red|\n|          7.8|            0.76|       0.04|           2.3|    0.092|                 15|                  54|  0.997|3.26|     0.65|    9.8|      5| red|\n|         11.2|            0.28|       0.56|           1.9|    0.075|                 17|                  60|  0.998|3.16|     0.58|    9.8|      6| red|\n|          7.4|             0.7|          0|           1.9|    0.076|                 11|                  34| 0.9978|3.51|     0.56|    9.4|      5| red|\n|          7.4|            0.66|          0|           1.8|    0.075|                 13|                  40| 0.9978|3.51|     0.56|    9.4|      5| red|\n|          7.9|             0.6|       0.06|           1.6|    0.069|                 15|                  59| 0.9964| 3.3|     0.46|    9.4|      5| red|\n|          7.3|            0.65|          0|           1.2|    0.065|                 15|                  21| 0.9946|3.39|     0.47|     10|      7| red|\n|          7.8|            0.58|       0.02|             2|    0.073|                  9|                  18| 0.9968|3.36|     0.57|    9.5|      7| red|\n|          7.5|             0.5|       0.36|           6.1|    0.071|                 17|                 102| 0.9978|3.35|      0.8|   10.5|      5| red|\n|          6.7|            0.58|       0.08|           1.8|    0.097|                 15|                  65| 0.9959|3.28|     0.54|    9.2|      5| red|\n|          7.5|             0.5|       0.36|           6.1|    0.071|                 17|                 102| 0.9978|3.35|      0.8|   10.5|      5| red|\n|          5.6|           0.615|          0|           1.6|    0.089|                 16|                  59| 0.9943|3.58|     0.52|    9.9|      5| red|\n|          7.8|            0.61|       0.29|           1.6|    0.114|                  9|                  29| 0.9974|3.26|     1.56|    9.1|      5| red|\n|          8.9|            0.62|       0.18|           3.8|    0.176|                 52|                 145| 0.9986|3.16|     0.88|    9.2|      5| red|\n|          8.9|            0.62|       0.19|           3.9|     0.17|                 51|                 148| 0.9986|3.17|     0.93|    9.2|      5| red|\n|          8.5|            0.28|       0.56|           1.8|    0.092|                 35|                 103| 0.9969| 3.3|     0.75|   10.5|      7| red|\n|          8.1|            0.56|       0.28|           1.7|    0.368|                 16|                  56| 0.9968|3.11|     1.28|    9.3|      5| red|\n|          7.4|            0.59|       0.08|           4.4|    0.086|                  6|                  29| 0.9974|3.38|      0.5|      9|      4| red|\n|          7.9|            0.32|       0.51|           1.8|    0.341|                 17|                  56| 0.9969|3.04|     1.08|    9.2|      6| red|\n+-------------+----------------+-----------+--------------+---------+-------------------+--------------------+-------+----+---------+-------+-------+----+\nonly showing top 20 rows\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528549812735_2129742760",
+      "id": "20180609-231012_848424136",
+      "dateCreated": "Jun 9, 2018 11:10:12 PM",
+      "dateStarted": "Jun 9, 2018 11:14:34 PM",
+      "dateFinished": "Jun 9, 2018 11:14:35 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "dfRed.count\ndfWhite.count\ndfMerge.count",
+      "user": "anonymous",
+      "dateUpdated": "Jun 9, 2018 11:17:41 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "res158: Long \u003d 1599\nres159: Long \u003d 4898\nres160: Long \u003d 6497\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528550105085_172908210",
+      "id": "20180609-231505_2049295079",
+      "dateCreated": "Jun 9, 2018 11:15:05 PM",
+      "dateStarted": "Jun 9, 2018 11:17:41 PM",
+      "dateFinished": "Jun 9, 2018 11:17:41 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "user": "anonymous",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1528552133896_697215859",
+      "id": "20180609-234853_1939174321",
+      "dateCreated": "Jun 9, 2018 11:48:53 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// sampe 10% of the dataframe and replace those rows with NULLs\nval sample10 \u003d dfMerge.sample(false, 0.1)\nval dfMerge10 \u003d dfMerge.map {\n    row \u003d\u003e {\n        if (row in sample10) null\n        else row\n    }\n}\n",
+      "user": "anonymous",
+      "dateUpdated": "Jun 9, 2018 11:48:20 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "sample10: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] \u003d [fixed acidity: string, volatile acidity: string ... 11 more fields]\nres162: Long \u003d 644\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528550768760_-857888812",
+      "id": "20180609-232608_164035921",
+      "dateCreated": "Jun 9, 2018 11:26:08 PM",
+      "dateStarted": "Jun 9, 2018 11:27:51 PM",
+      "dateFinished": "Jun 9, 2018 11:27:52 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// other code I\u0027ve found - doesn\u0027t work as well\nprintln(\"Column averages:\")\nfor (columnHeader \u003c- df.columns) {\n    val columnAverage \u003d df.agg(avg(df.col(columnHeader)))\n    println(columnHeader + \":  \" + columnAverage)\n}\n//val averageDelays \u003d df_4.groupBy(df_4.col(\"FlightNum\")).agg(avg(df_4.col(\"ArrDelay\")), avg(df_4.col(\"DepDelay\")))",
+      "user": "anonymous",
+      "dateUpdated": "Jun 9, 2018 10:46:53 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Column averages:\n\"fixed acidity\";\"volatile acidity\";\"citric acid\";\"residual sugar\";\"chlorides\";\"free sulfur dioxide\";\"total sulfur dioxide\";\"density\";\"pH\";\"sulphates\";\"alcohol\";\"quality\"\":  [avg(\"fixed acidity\";\"volatile acidity\";\"citric acid\";\"residual sugar\";\"chlorides\";\"free sulfur dioxide\";\"total sulfur dioxide\";\"density\";\"pH\";\"sulphates\";\"alcohol\";\"quality\"\"): double]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528512346364_2022895660",
+      "id": "20180609-124546_1512779309",
+      "dateCreated": "Jun 9, 2018 12:45:46 PM",
+      "dateStarted": "Jun 9, 2018 1:27:56 PM",
+      "dateFinished": "Jun 9, 2018 1:27:57 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// Simple implementation of the PageRank algorithm in Spark.\n// Input file has the format of a tab separated file of URLs, where the first URL\n//   in each line is the node, and each subsequent URL in the line is an outlink\n//   for that node\n\nval linkList \u003d sc.textFile(\"/srv/home/rgai0001/spark-2.2.1-bin-hadoop2.7/examples/exercises/urlGraph.txt\")\nval N \u003d linkList.count  // number of URLs\n\nval links \u003d linkList.map(line \u003d\u003e line.split(\"\\\\s+\")).map(line \u003d\u003e (line.head, line.tail))    // RDD of (URL, outlinks)\nvar ranks \u003d links.map(link \u003d\u003e (link._1, 1.0/N))  // RDD of (URL, rank) pairs, all initialised equally\n\nval maxIter \u003d 100 // Maximum number of updates\nval alpha \u003d 0.15  // update coefficient\nfor (i \u003c- 1 to maxIter) {\n    // Build an RDD of (outlink, newContribution) pairs\n    val contribs \u003d links.join(ranks).flatMap {\n        (url, dests)(dest, rank) \u003d\u003e (url, List(dest, rank)) \u003d\u003e (url, List(dest, dests2, dest.rank)) \u003d\u003e (url, List(dest.rank/dests2.size))\n        (url, (dests, rank)) \u003d\u003e (dest, rank/dests.size))\n      (url, (links, rank)) \u003d\u003e links.map((url,dest) \u003d\u003e (dest, rank/links.size))\n    }\n    // Sum contributions by URL and get new ranks\n    ranks \u003d contribs.reduceByKey(_+_).mapValues(sum \u003d\u003e alpha/N + (1-alpha)*sum)\n}\n\nranks.collect()",
+      "user": "anonymous",
+      "dateUpdated": "Jun 1, 2018 10:37:24 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "linkList: org.apache.spark.rdd.RDD[String] \u003d /srv/home/rgai0001/spark-2.2.1-bin-hadoop2.7/examples/exercises/urlGraph.txt MapPartitionsRDD[42] at textFile at \u003cconsole\u003e:32\nN: Long \u003d 50\nlinks: org.apache.spark.rdd.RDD[(String, Array[String])] \u003d MapPartitionsRDD[44] at map at \u003cconsole\u003e:29\nranks: org.apache.spark.rdd.RDD[(String, Long)] \u003d MapPartitionsRDD[45] at map at \u003cconsole\u003e:34\nmaxIter: Int \u003d 100\nalpha: Double \u003d 0.15\n\u003cconsole\u003e:4: error: not a legal formal parameter.\nNote: Tuples cannot be directly destructured in method or function parameters.\n      Either create a single parameter accepting the Tuple2,\n      or consider a pattern matching anonymous function: `{ case (links, rank) \u003d\u003e ... }\n      (url, (links, rank)) \u003d\u003e links.map(dest \u003d\u003e (dest, rank/links.size))\n            ^\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1527679360750_-224086476",
+      "id": "20180530-212240_1685346112",
+      "dateCreated": "May 30, 2018 9:22:40 PM",
+      "dateStarted": "May 31, 2018 11:29:10 AM",
+      "dateFinished": "May 31, 2018 11:29:11 AM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "\nval lines \u003d sc.textFile(\"/srv/home/rgai0001/spark-2.2.1-bin-hadoop2.7/examples/exercises/simpleGraph.txt\")\nval N \u003d lines.count  // number of URLs\n\nval links \u003d lines.map(line \u003d\u003e line.split(\"\\\\s+\")).map(line \u003d\u003e (line.head, line.tail)) // RDD of (URL, outlinks)\nlinks.collect()\nvar ranks \u003d links.map(link \u003d\u003e (link._1, 1.0/N))  // RDD of (URL, rank) pairs, all initialised equally\nranks.collect()\n\nval maxIter \u003d 5 // Maximum number of updates\nval alpha \u003d 0.15  // update coefficient\nfor (i \u003c- 1 to maxIter) {\n    // Build an RDD of (outlink, newContribution) pairs\n    val contribs \u003d links.join(ranks).values.flatMap{\n        case (urls, rank) \u003d\u003e val size \u003d urls.size\n        urls.map(url \u003d\u003e (url, rank / size))\n    }\n//    contribs.collect()\n    \n    // Sum contributions by URL and get new ranks\n    ranks \u003d contribs.reduceByKey(_+_).mapValues(sum \u003d\u003e alpha/N + (1-alpha)*sum)\n}\n\nranks.collect()",
+      "user": "anonymous",
+      "dateUpdated": "Jun 2, 2018 11:07:03 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "lines: org.apache.spark.rdd.RDD[String] \u003d /srv/home/rgai0001/spark-2.2.1-bin-hadoop2.7/examples/exercises/simpleGraph.txt MapPartitionsRDD[206] at textFile at \u003cconsole\u003e:28\nN: Long \u003d 5\nlinks: org.apache.spark.rdd.RDD[(String, Array[String])] \u003d MapPartitionsRDD[208] at map at \u003cconsole\u003e:30\nres96: Array[(String, Array[String])] \u003d Array((1,Array(2, 3, 4, 5)), (2,Array(3, 4)), (3,Array(4, 5, 1)), (4,Array(5)), (5,Array(1, 2, 3, 4)))\nranks: org.apache.spark.rdd.RDD[(String, Double)] \u003d MapPartitionsRDD[209] at map at \u003cconsole\u003e:33\nres97: Array[(String, Double)] \u003d Array((1,0.2), (2,0.2), (3,0.2), (4,0.2), (5,0.2))\nmaxIter: Int \u003d 5\nalpha: Double \u003d 0.15\nres101: Array[(String, Double)] \u003d Array((1,0.2), (2,0.2), (3,0.2), (4,0.2), (5,0.2))\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1527681563297_1640563748",
+      "id": "20180530-215923_1892047324",
+      "dateCreated": "May 30, 2018 9:59:23 PM",
+      "dateStarted": "Jun 2, 2018 11:07:03 PM",
+      "dateFinished": "Jun 2, 2018 11:07:05 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val lines \u003d sc.textFile(\"/srv/home/rgai0001/spark-2.2.1-bin-hadoop2.7/examples/exercises/simpleGraph.txt\")\n\nval links \u003d lines.map(line \u003d\u003e line.split(\"\\\\s+\")).map(line \u003d\u003e (line.head, line.tail))  // RDD of (URL, outlinks) where outlinks is a list\nval flatLinks \u003d links.flatMap( linkList \u003d\u003e (linkList._2).map(l \u003d\u003e (linkList._1, l)) )     // RDD of (URL, outlink) where URL key is repeated in a flat list\n\nval N \u003d flatLinks.count  // number of links\nvar ranks \u003d flatLinks.mapValues(v \u003d\u003e 1.0/N)     // (URL, rank) pairs, all initialised equally\n\nlinks.collect()\nflatLinks.collect()\n\nval maxIter \u003d 10 // Maximum number of updates\nval alpha \u003d 0.15  // update coefficient\n//for (i \u003c- 1 to maxIter) {\n    val contribs \u003d flatLinks.join(ranks).values.flatMap{\n        case (urls, rank) \u003d\u003e val size \u003d urls.size\n        urls.map(url \u003d\u003e (url, rank / size))\n    }\n//    ranks \u003d contribs.reduceByKey(_ + _).mapValues(sum \u003d\u003e alpha/N + (1-alpha)*sum)\n//}\n\nranks.collect()",
+      "user": "anonymous",
+      "dateUpdated": "Jun 2, 2018 10:06:00 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "lines: org.apache.spark.rdd.RDD[String] \u003d /srv/home/rgai0001/spark-2.2.1-bin-hadoop2.7/examples/exercises/simpleGraph.txt MapPartitionsRDD[40] at textFile at \u003cconsole\u003e:27\nlinks: org.apache.spark.rdd.RDD[(String, Array[String])] \u003d MapPartitionsRDD[42] at map at \u003cconsole\u003e:30\nflatLinks: org.apache.spark.rdd.RDD[(String, String)] \u003d MapPartitionsRDD[43] at flatMap at \u003cconsole\u003e:33\nN: Long \u003d 14\nranks: org.apache.spark.rdd.RDD[(String, Double)] \u003d MapPartitionsRDD[44] at mapValues at \u003cconsole\u003e:37\nres26: Array[(String, Array[String])] \u003d Array((1,Array(2, 3, 4, 5)), (2,Array(3, 4)), (3,Array(4, 5, 1)), (4,Array(5)), (5,Array(1, 2, 3, 4)))\nres27: Array[(String, String)] \u003d Array((1,2), (1,3), (1,4), (1,5), (2,3), (2,4), (3,4), (3,5), (3,1), (4,5), (5,1), (5,2), (5,3), (5,4))\nmaxIter: Int \u003d 100\nalpha: Double \u003d 0.15\n\u003cconsole\u003e:49: error: type mismatch;\n found   : org.apache.spark.rdd.RDD[(Char, Double)]\n required: org.apache.spark.rdd.RDD[(String, Double)]\n           ranks \u003d contribs.reduceByKey(_ + _).mapValues(sum \u003d\u003e alpha/N + (1-alpha)*sum)\n                                                        ^\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1527938640320_1247076299",
+      "id": "20180602-212400_659099683",
+      "dateCreated": "Jun 2, 2018 9:24:00 PM",
+      "dateStarted": "Jun 2, 2018 10:02:09 PM",
+      "dateFinished": "Jun 2, 2018 10:02:11 PM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "(s.split(\" \").head, s.split(\" \").tail)",
+      "user": "anonymous",
+      "dateUpdated": "May 30, 2018 10:24:12 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {}
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1527681642836_-1472131474",
+      "id": "20180530-220042_453295848",
+      "dateCreated": "May 30, 2018 10:00:42 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "spark-exercises",
+  "id": "2DE8U2NBR",
+  "angularObjects": {
+    "2CY4SB1H5:shared_process": [],
+    "2CXC618EC:shared_process": [],
+    "2CYVBGAMQ:shared_process": [],
+    "2CY3Y61TM:shared_process": [],
+    "2CXRH3T8B:shared_process": [],
+    "2CXTQKGUW:shared_process": [],
+    "2CXCNM6ZT:shared_process": [],
+    "2CXZADFKB:shared_process": [],
+    "2CUZKD23K:shared_process": [],
+    "2CVM42UGQ:shared_process": [],
+    "2CVPRSQB6:shared_process": [],
+    "2CYHQDYMU:shared_process": [],
+    "2CVV5NFCM:shared_process": [],
+    "2CW23H68H:shared_process": [],
+    "2CY8N5QUM:shared_process": [],
+    "2CVTBZ9KW:shared_process": [],
+    "2CWGDUPZW:shared_process": [],
+    "2CVKDDERZ:shared_process": [],
+    "2CYGMRJ4Q:shared_process": []
+  },
+  "config": {},
+  "info": {}
+}

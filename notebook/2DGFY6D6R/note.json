@@ -1,0 +1,998 @@
+{
+  "paragraphs": [
+    {
+      "text": "// Assessment 4 - Part A\n\nimport java.io._\nimport java.util.Timer\nimport java.util.TimerTask\n\n// Generate file of random integer 2-tuples\n// Instantiate random number generators, each set by different seed\nval bound \u003d new scala.util.Random(10)   // random window bounds\nval elem \u003d new scala.util.Random(20)    // random data elements\nval winSize \u003d 50                        // max range of random numbers\nval numFiles \u003d 10                       // number of files in the stream\nval numLines \u003d 100                      // number of lines of data per file\nval path \u003d \"/srv/home/rgai0001/ass4/streamdata/file\"\n\n// Generate files of random numbers. Each file will be based\n// on a different distribution of numbers according to the bounds\nfor (fileCounter \u003c- 1 to numFiles) {\n    val t \u003d new java.util.Timer()\n    val task \u003d new java.util.TimerTask {\n        def run() \u003d {\n            // create and open new data file\n            val file \u003d new File(path + fileCounter.toString + \".txt\")\n            val bw \u003d new BufferedWriter(new FileWriter(file))\n    \n            // lower bound - random number between 1 and winSize\n            val lower1 \u003d bound.nextInt(winSize)\n            // upper bound - random number between winSize and 2*winSize\n            val upper1 \u003d winSize + bound.nextInt(winSize)\n            val lower2 \u003d bound.nextInt(winSize)\n            val upper2 \u003d winSize + bound.nextInt(winSize)\n    \n            // Generate each line of data\n            for (lineCounter \u003c- 1 to numLines) {\n                // generate random numbers between lower and upper bounds\n                var elem1 \u003d lower1 + elem.nextInt(upper1)\n                var elem2 \u003d lower2 + elem.nextInt(upper2)\n                bw.write(\"[\" + elem1.toString + \",\" + elem2.toString + \"]\\n\")\n            }\n            bw.close()\n        }\n    }\n    t.schedule(task, 5000L)\n    task.cancel()\n}",
+      "user": "anonymous",
+      "dateUpdated": "Jun 18, 2018 12:40:38 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import java.io._\nimport java.util.Timer\nimport java.util.TimerTask\nbound: scala.util.Random \u003d scala.util.Random@6cbd2ec2\nelem: scala.util.Random \u003d scala.util.Random@c9e2c54\nwinSize: Int \u003d 50\nnumFiles: Int \u003d 10\nnumLines: Int \u003d 100\npath: String \u003d /srv/home/rgai0001/ass4/streamdata/file\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1529202849039_-581006140",
+      "id": "20180617-123409_1687607527",
+      "dateCreated": "Jun 17, 2018 12:34:09 PM",
+      "dateStarted": "Jun 18, 2018 12:40:38 AM",
+      "dateFinished": "Jun 18, 2018 12:40:41 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import scala.concurrent.duration.{FiniteDuration, SECONDS}\nimport scalaz.concurrent.Task\n\n// Generate file of random integer 2-tuples\n// Instantiate random number generators, each set by different seed\nval bound \u003d new scala.util.Random(10)   // random window bounds\nval elem \u003d new scala.util.Random(20)    // random data elements\nval winSize \u003d 50                        // max range of random numbers\nval numFiles \u003d 10                       // number of files in the stream\nval numLines \u003d 100                      // number of lines of data per file\nval path \u003d \"/srv/home/rgai0001/ass4/streamdata/file\"\n\ndef printFile(name: String) \u003d {\n    // create and open new data file\n    val file \u003d new File(path + name.toString + \".txt\")\n    val bw \u003d new BufferedWriter(new FileWriter(file))\n    \n    // lower bound - random number between 1 and winSize\n    val lower1 \u003d bound.nextInt(winSize)\n    // upper bound - random number between winSize and 2*winSize\n    val upper1 \u003d winSize + bound.nextInt(winSize)\n    val lower2 \u003d bound.nextInt(winSize)\n    val upper2 \u003d winSize + bound.nextInt(winSize)\n    \n    // Generate each line of data\n    for (lineCounter \u003c- 1 to numLines) {\n        // generate random numbers between lower and upper bounds\n        var elem1 \u003d lower1 + elem.nextInt(upper1)\n        var elem2 \u003d lower2 + elem.nextInt(upper2)\n        bw.write(\"[\" + elem1.toString + \",\" + elem2.toString + \"]\\n\")\n    }\n    bw.close()\n}\n\n// Generate files of random numbers. Each file will be based\n// on a different distribution of numbers according to the bounds\nfor (fileCounter \u003c- 1 to numFiles) {\n    Task.schedule(printFile(fileCounter), FiniteDuration(5, SECONDS)).runAsync { _ \u003d\u003e }    \n}\n",
+      "user": "anonymous",
+      "dateUpdated": "Jun 18, 2018 12:53:10 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import scala.concurrent.duration.{FiniteDuration, SECONDS}\n\u003cconsole\u003e:122: error: not found: value scalaz\n       import scalaz.concurrent.Task\n              ^\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1529246708392_-917042619",
+      "id": "20180618-004508_1758904843",
+      "dateCreated": "Jun 18, 2018 12:45:08 AM",
+      "dateStarted": "Jun 18, 2018 12:53:10 AM",
+      "dateFinished": "Jun 18, 2018 12:53:10 AM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// Based on example given at:\n//  https://github.com/apache/spark/blob/master/examples/src/main/scala/org/apache/spark/examples/mllib/StreamingKMeansExample.scala\nimport org.apache.spark.SparkConf\n// $example on$\nimport org.apache.spark.mllib.clustering.StreamingKMeans\nimport org.apache.spark.mllib.linalg.Vectors\nimport org.apache.spark.mllib.regression.LabeledPoint\nimport org.apache.spark.streaming.{Seconds, StreamingContext}\n// $example off$\n\n/**\n * Estimate clusters on one stream of data and make predictions\n * on another stream, where the data streams arrive as text files\n * into two different directories.\n *\n * The rows of the training text files must be vector data in the form\n * `[x1,x2,x3,...,xn]`\n * Where n is the number of dimensions.\n *\n * The rows of the test text files must be labeled data in the form\n * `(y,[x1,x2,x3,...,xn])`\n * Where y is some identifier. n must be the same for train and test.\n *\n * Usage:\n *   StreamingKMeansExample \u003ctrainingDir\u003e \u003ctestDir\u003e \u003cbatchDuration\u003e \u003cnumClusters\u003e \u003cnumDimensions\u003e\n *\n * To run on your local machine using the two directories `trainingDir` and `testDir`,\n * with updates every 5 seconds, 2 dimensions per data point, and 3 clusters, call:\n *    $ bin/run-example mllib.StreamingKMeansExample trainingDir testDir 5 3 2\n *\n * As you add text files to `trainingDir` the clusters will continuously update.\n * Anytime you add text files to `testDir`, you\u0027ll see predicted labels using the current model.\n *\n */\n//object StreamingKMeansExample {\n\n//  def main(args: Array[String]) {\n//    if (args.length !\u003d 5) {\n//      System.err.println(\n//        \"Usage: StreamingKMeansExample \" +\n//          \"\u003ctrainingDir\u003e \u003ctestDir\u003e \u003cbatchDuration\u003e \u003cnumClusters\u003e \u003cnumDimensions\u003e\")\n//      System.exit(1)\n//    }\n\nsc.setLogLevel(\"OFF\")\nsc.stop()\n    val trainingPath \u003d \"/srv/home/rgai0001/ass4/streamdata\"\n    val numClusters \u003d 4\n    val batchDuration \u003d 5L\n    val numDimensions \u003d 2\n    // $example on$\n    val conf \u003d new SparkConf().setMaster(\"local[2]\").setAppName(\"StreamingKMeansExample\")\n    val ssc \u003d new StreamingContext(conf, Seconds(batchDuration))\n\n    val trainingData \u003d ssc.textFileStream(trainingPath).map(Vectors.parse)\n   \n\nval model \u003d new StreamingKMeans().\n    setK(numClusters).\n    setDecayFactor(0.5).\n    setRandomCenters(numDimensions, 50.0)\n\nmodel.trainOn(trainingData)\n\n    ssc.start()\n    ssc.awaitTerminationOrTimeout(10)\n    // $example off$\n//}\n//}\n// scalastyle:on println",
+      "user": "anonymous",
+      "dateUpdated": "Jun 19, 2018 3:28:46 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.SparkConf\nimport org.apache.spark.mllib.clustering.StreamingKMeans\nimport org.apache.spark.mllib.linalg.Vectors\nimport org.apache.spark.mllib.regression.LabeledPoint\nimport org.apache.spark.streaming.{Seconds, StreamingContext}\ntrainingPath: String \u003d /srv/home/rgai0001/ass4/streamdata\nnumClusters: Int \u003d 4\nbatchDuration: Long \u003d 5\nnumDimensions: Int \u003d 2\nconf: org.apache.spark.SparkConf \u003d org.apache.spark.SparkConf@71ff1a2\norg.apache.spark.SparkException: Only one SparkContext may be running in this JVM (see SPARK-2243). To ignore this error, set spark.driver.allowMultipleContexts \u003d true. The currently running SparkContext was created at:\norg.apache.spark.SparkContext.\u003cinit\u003e(SparkContext.scala:76)\norg.apache.spark.streaming.StreamingContext$.createNewSparkContext(StreamingContext.scala:839)\norg.apache.spark.streaming.StreamingContext.\u003cinit\u003e(StreamingContext.scala:85)\n\u003cinit\u003e(\u003cconsole\u003e:50)\n\u003cinit\u003e(\u003cconsole\u003e:55)\n\u003cinit\u003e(\u003cconsole\u003e:57)\n\u003cinit\u003e(\u003cconsole\u003e:59)\n\u003cinit\u003e(\u003cconsole\u003e:61)\n\u003cinit\u003e(\u003cconsole\u003e:63)\n\u003cinit\u003e(\u003cconsole\u003e:65)\n\u003cinit\u003e(\u003cconsole\u003e:67)\n\u003cinit\u003e(\u003cconsole\u003e:69)\n\u003cinit\u003e(\u003cconsole\u003e:71)\n\u003cinit\u003e(\u003cconsole\u003e:73)\n\u003cinit\u003e(\u003cconsole\u003e:75)\n\u003cinit\u003e(\u003cconsole\u003e:77)\n.\u003cinit\u003e(\u003cconsole\u003e:81)\n.\u003cclinit\u003e(\u003cconsole\u003e)\n.$print$lzycompute(\u003cconsole\u003e:7)\n.$print(\u003cconsole\u003e:6)\n  at org.apache.spark.SparkContext$$anonfun$assertNoOtherContextIsRunning$2.apply(SparkContext.scala:2479)\n  at org.apache.spark.SparkContext$$anonfun$assertNoOtherContextIsRunning$2.apply(SparkContext.scala:2475)\n  at scala.Option.foreach(Option.scala:257)\n  at org.apache.spark.SparkContext$.assertNoOtherContextIsRunning(SparkContext.scala:2475)\n  at org.apache.spark.SparkContext$.markPartiallyConstructed(SparkContext.scala:2564)\n  at org.apache.spark.SparkContext.\u003cinit\u003e(SparkContext.scala:85)\n  at org.apache.spark.streaming.StreamingContext$.createNewSparkContext(StreamingContext.scala:839)\n  at org.apache.spark.streaming.StreamingContext.\u003cinit\u003e(StreamingContext.scala:85)\n  ... 50 elided\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1529250513736_-1945986013",
+      "id": "20180618-014833_329096810",
+      "dateCreated": "Jun 18, 2018 1:48:33 AM",
+      "dateStarted": "Jun 19, 2018 11:43:47 AM",
+      "dateFinished": "Jun 19, 2018 11:43:49 AM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// Small graph example to test out some of the processing methods in Ass 4, Q2\nimport org.apache.spark.graphx._\nimport org.apache.spark.rdd.RDD\n\nval vertices: RDD[(VertexId, String)] \u003d sc.parallelize(Array(\n    (1L, \"A\"), (2L, \"B\"), (3L, \"C\"), (4L, \"D\"), (5L, \"E\"), (6L, \"F\")\n))\n     \nval links: RDD[Edge[(Int, Int, Int)]] \u003d sc.parallelize(Array(\n    Edge(1L, 2L, (10, 1, 2)), Edge(1L, 2L, (10, 0, 3)), Edge(2L, 1L, (10, 1, 3)), Edge(2L, 1L, (10, 1, 1)), // edge A-B links\n    Edge(1L, 3L, (15, 0, 0)), Edge(1L, 3L, (15, 0, 2)), Edge(3L, 1L, (15, 1, 1)),                           // edge A-C links\n    Edge(3L, 4L, (12, 0, 0)), Edge(3L, 4L, (12, 0, 1)), Edge(3L, 4L, (12, 1, 2)), Edge(3L, 4L, (12, 3, 2)), Edge(3L, 4L, (12, 1, 1)),\n        Edge(4L, 3L, (12, 0, 0)), Edge(4L, 3L, (12, 3, 3)), Edge(4L, 3L, (12, 1, 1)),                       // edge C-D links\n    Edge(3L, 5L, (5, 0, 0)), Edge(5L, 3L, (15, 1, 1)),                                                      // edge C-E links\n    Edge(3L, 6L, (20, 2, 4)), Edge(3L, 6L, (20, 0, 2)), Edge(3L, 6L, (20, 0, 2)),  Edge(6L, 3L, (20, 1, 1)),\n        Edge(6L, 3L, (20, 2, 3)), Edge(6L, 3L, (20, 2, 2))                                                  // edge C-F links\n))\n     \nval defaultVertex \u003d (\"Missing\")\nval graph \u003d Graph(vertices, links, defaultVertex)\n\ngraph.vertices.collect()\ngraph.edges.collect()",
+      "user": "anonymous",
+      "dateUpdated": "Jun 16, 2018 3:45:12 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.graphx._\nimport org.apache.spark.rdd.RDD\nvertices: org.apache.spark.rdd.RDD[(org.apache.spark.graphx.VertexId, String)] \u003d ParallelCollectionRDD[1992] at parallelize at \u003cconsole\u003e:169\nlinks: org.apache.spark.rdd.RDD[org.apache.spark.graphx.Edge[(Int, Int, Int)]] \u003d ParallelCollectionRDD[1993] at parallelize at \u003cconsole\u003e:169\ndefaultVertex: String \u003d Missing\ngraph: org.apache.spark.graphx.Graph[String,(Int, Int, Int)] \u003d org.apache.spark.graphx.impl.GraphImpl@468b201\nres1047: Array[(org.apache.spark.graphx.VertexId, String)] \u003d Array((4,D), (6,F), (2,B), (1,A), (3,C), (5,E))\nres1048: Array[org.apache.spark.graphx.Edge[(Int, Int, Int)]] \u003d Array(Edge(1,2,(10,1,2)), Edge(1,2,(10,0,3)), Edge(1,3,(15,0,0)), Edge(1,3,(15,0,2)), Edge(2,1,(10,1,3)), Edge(2,1,(10,1,1)), Edge(3,1,(15,1,1)), Edge(3,4,(12,0,0)), Edge(3,4,(12,0,1)), Edge(3,4,(12,1,2)), Edge(3,4,(12,3,2)), Edge(3,4,(12,1,1)), Edge(3,5,(5,0,0)), Edge(3,6,(20,2,4)), Edge(3,6,(20,0,2)), Edge(3,6,(20,0,2)), Edge(4,3,(12,0,0)), Edge(4,3,(12,3,3)), Edge(4,3,(12,1,1)), Edge(5,3,(15,1,1)), Edge(6,3,(20,1,1)), Edge(6,3,(20,2,3)), Edge(6,3,(20,2,2)))\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1529032224533_776055159",
+      "id": "20180615-131024_1795891279",
+      "dateCreated": "Jun 15, 2018 1:10:24 PM",
+      "dateStarted": "Jun 16, 2018 3:45:12 PM",
+      "dateFinished": "Jun 16, 2018 3:46:10 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// Find the top 10 busiest nodes\ngraph.inDegrees.join(graph.outDegrees)      // construct RDD of [vertex, inDeg, outDeg]\n    .map(x \u003d\u003e (x._1, x._2._1 + x._2._2))    // sum inDeg + outDeg for each vertex\n    .join(vertices)                         // join with vertices RDD so vertex names can be attached\n    .sortBy(_._2._1, ascending\u003dfalse)       // display in descending order\n    .collect().map(_._2)                    // just display vertex name and degree, not vertex ID",
+      "user": "anonymous",
+      "dateUpdated": "Jun 16, 2018 3:46:25 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "res1050: Array[(Int, String)] \u003d Array((19,C), (8,D), (7,A), (6,F), (4,B), (2,E))\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1529041107482_915250465",
+      "id": "20180615-153827_1683509053",
+      "dateCreated": "Jun 15, 2018 3:38:27 PM",
+      "dateStarted": "Jun 16, 2018 3:46:25 PM",
+      "dateFinished": "Jun 16, 2018 3:46:39 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// The top 10 routes based on actual time in air\n// Actual time in air \u003d  Elapsed Time - DepartuareDelay + ArrivalDelay\ngraph.mapEdges(e \u003d\u003e e.attr._1 - e.attr._2 + e.attr._3)  // calculate actual time for each edge\n    .groupEdges(_+_)                                    // aggregate time for all directed edges between two vertices\n    .triplets.map(t \u003d\u003e (t.srcAttr, t.dstAttr, t.attr))  // extract vertex and total actual time information\n    .sortBy(_._3, ascending\u003dfalse).collect()            // display in descending order",
+      "user": "anonymous",
+      "dateUpdated": "Jun 16, 2018 3:59:33 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "res1053: Array[(String, String, Int)] \u003d Array((C,F,66), (F,C,61), (C,D,49), (D,C,36), (A,C,32), (A,B,24), (B,A,22), (C,A,15), (E,C,15), (C,D,12), (C,E,5))\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1529034365339_693952570",
+      "id": "20180615-134605_99539583",
+      "dateCreated": "Jun 15, 2018 1:46:05 PM",
+      "dateStarted": "Jun 16, 2018 3:47:08 PM",
+      "dateFinished": "Jun 16, 2018 3:47:20 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// The 10 worst routes in terms of average arrival delays\ngraph.mapEdges(e \u003d\u003e (e.attr._3, 1))                         // get arrival delay from edge attribute and insert edge counter\n    .groupEdges((e1, e2) \u003d\u003e (e1._1 + e2._1, e1._2 + e2._2)) // aggregate arrival delays for each route and count like edges\n    .mapEdges(e \u003d\u003e e.attr._1.toFloat / e.attr._2)           // average \u003d total arrival delay / number of edges per route\n    .triplets.map(t \u003d\u003e (t.srcAttr, t.dstAttr, t.attr))      // extract vertex and average arrival delay information\n    .sortBy(_._3, ascending\u003dfalse).collect()                // display in descending order",
+      "user": "anonymous",
+      "dateUpdated": "Jun 16, 2018 10:15:07 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "res1055: Array[(String, String, Float)] \u003d Array((C,F,2.6666667), (A,B,2.5), (B,A,2.0), (F,C,2.0), (D,C,1.3333334), (C,D,1.25), (A,C,1.0), (C,A,1.0), (C,D,1.0), (E,C,1.0), (C,E,0.0))\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1529042353809_558246922",
+      "id": "20180615-155913_491506541",
+      "dateCreated": "Jun 15, 2018 3:59:13 PM",
+      "dateStarted": "Jun 16, 2018 3:47:54 PM",
+      "dateFinished": "Jun 16, 2018 3:48:07 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// The 10 worst airports in terms of average departure delays\n\n// This code is based on GraphX documentation code and StackExchange code snippet:\n//   https://spark.apache.org/docs/latest/graphx-programming-guide.html#neighborhood-aggregation\n//   https://stackoverflow.com/questions/35648558/how-to-sum-edge-weights-with-graphx\n// with some modifications for the specific problem\nval departureDelays: VertexRDD[(Int, Int)] \u003d \n    graph.mapEdges(e \u003d\u003e e.attr._2)                // collapse edge attribute to departure delay\n    .aggregateMessages[(Int, Int)](\n        triplet \u003d\u003e { // Map Function\n            triplet.sendToSrc((1, triplet.attr))  // send edge counter and departure delay to source\n        }, // Reduce Function\n        (a, b) \u003d\u003e (a._1 + b._1, a._2 + b._2),     // count edges and aggregate departure delays\n        TripletFields.EdgeOnly\n    )\n\n// Divide total departure delays by number of edges (flights)\nval avgDepartureDelays: VertexRDD[Double] \u003d\n    departureDelays.mapValues( (id, value) \u003d\u003e\n        value match { case (count, totalDelay) \u003d\u003e totalDelay.toFloat / count } )\n        \n// Display the results\navgDepartureDelays.collect.foreach(println(_))",
+      "user": "anonymous",
+      "dateUpdated": "Jun 16, 2018 10:26:06 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "departureDelays: org.apache.spark.graphx.VertexRDD[(Int, Int)] \u003d VertexRDDImpl[2089] at RDD at VertexRDD.scala:57\navgDepartureDelays: org.apache.spark.graphx.VertexRDD[Double] \u003d VertexRDDImpl[2091] at RDD at VertexRDD.scala:57\n(4,1.3333333730697632)\n(6,1.6666666269302368)\n(2,1.0)\n(1,0.25)\n(3,0.800000011920929)\n(5,1.0)\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1529066479615_-1414031109",
+      "id": "20180615-224119_1259870397",
+      "dateCreated": "Jun 15, 2018 10:41:19 PM",
+      "dateStarted": "Jun 16, 2018 10:26:06 PM",
+      "dateFinished": "Jun 16, 2018 10:26:42 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// Assessment 4 - Part B\nimport org.apache.spark.sql.types.{StructType, StructField, StringType, IntegerType, LongType}\nimport org.apache.spark.graphx._\nimport org.apache.spark.rdd.RDD\nimport java.io._\n\n// file name stub to use to write files to\nval path \u003d \"/srv/home/rgai0001/ass4/28838750_\"\n// adjusting the log level to only errors (ignore warnings)\nsc.setLogLevel(\"error\")\n\nval customSchema \u003d StructType(Array(\n    StructField(\"DayOfMonth\", IntegerType, true),\n    StructField(\"DayOfWeek\", IntegerType, true),\n    StructField(\"CarrierCode\", StringType, true),\n    StructField(\"TailNum\", StringType, true),\n    StructField(\"FlightNum\", StringType, true),\n    StructField(\"OriginAirportID\", LongType, true),\n    StructField(\"OriginAirport\", StringType, true),\n    StructField(\"DestinationAirportID\", LongType, true),\n    StructField(\"DestinationAirport\", StringType, true),\n    StructField(\"ScheduledDepartureTime\", StringType, true),\n    StructField(\"ActualDepartureTime\", StringType, true),\n    StructField(\"DepartureDelay\", IntegerType, true),\n    StructField(\"ScheduledArrivalTime\", StringType, true),\n    StructField(\"ActualArrivalTime\", StringType, true),\n    StructField(\"ArrivalDelay\", StringType, true),\n    StructField(\"ElapsedTime\", IntegerType, true),\n    StructField(\"Distance\", IntegerType, true)\n))\n    \nval df \u003d spark.read.schema(customSchema).csv(\"/srv/home/rgai0001/ass4/test.csv.bz2\")\n// we will be accessing the dataframe multiple times so persist in memory\ndf.persist()\ndf.printSchema()",
+      "user": "anonymous",
+      "dateUpdated": "Jun 19, 2018 9:15:01 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.sql.types.{StructType, StructField, StringType, IntegerType, LongType}\nimport org.apache.spark.graphx._\nimport org.apache.spark.rdd.RDD\nimport java.io._\npath: String \u003d /srv/home/rgai0001/ass4/28838750_\ncustomSchema: org.apache.spark.sql.types.StructType \u003d StructType(StructField(DayOfMonth,IntegerType,true), StructField(DayOfWeek,IntegerType,true), StructField(CarrierCode,StringType,true), StructField(TailNum,StringType,true), StructField(FlightNum,StringType,true), StructField(OriginAirportID,LongType,true), StructField(OriginAirport,StringType,true), StructField(DestinationAirportID,LongType,true), StructField(DestinationAirport,StringType,true), StructField(ScheduledDepartureTime,StringType,true), StructField(ActualDepartureTime,StringType,true), StructField(DepartureDelay,IntegerType,true), StructField(ScheduledArrivalTime,StringType,true), StructField(ActualArrivalTime,StringType,true), StructField(ArrivalDelay,StringType,true), StructField(ElapsedTime,IntegerType,true), StructFie...df: org.apache.spark.sql.DataFrame \u003d [DayOfMonth: int, DayOfWeek: int ... 15 more fields]\nres8: df.type \u003d [DayOfMonth: int, DayOfWeek: int ... 15 more fields]\nroot\n |-- DayOfMonth: integer (nullable \u003d true)\n |-- DayOfWeek: integer (nullable \u003d true)\n |-- CarrierCode: string (nullable \u003d true)\n |-- TailNum: string (nullable \u003d true)\n |-- FlightNum: string (nullable \u003d true)\n |-- OriginAirportID: long (nullable \u003d true)\n |-- OriginAirport: string (nullable \u003d true)\n |-- DestinationAirportID: long (nullable \u003d true)\n |-- DestinationAirport: string (nullable \u003d true)\n |-- ScheduledDepartureTime: string (nullable \u003d true)\n |-- ActualDepartureTime: string (nullable \u003d true)\n |-- DepartureDelay: integer (nullable \u003d true)\n |-- ScheduledArrivalTime: string (nullable \u003d true)\n |-- ActualArrivalTime: string (nullable \u003d true)\n |-- ArrivalDelay: string (nullable \u003d true)\n |-- ElapsedTime: integer (nullable \u003d true)\n |-- Distance: integer (nullable \u003d true)\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528437553091_-92667519",
+      "id": "20180608-155913_34108967",
+      "dateCreated": "Jun 8, 2018 3:59:13 PM",
+      "dateStarted": "Jun 19, 2018 9:15:01 PM",
+      "dateFinished": "Jun 19, 2018 9:15:27 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// select out the airport IDs (to be used as vertex IDs) and airport codes\nval airportOrigins \u003d df.select($\"OriginAirportID\", $\"OriginAirport\")\nval airportDests \u003d df.select($\"DestinationAirportID\", $\"DestinationAirport\")\n\n// contruct an RDD of airport vertices by merging the origin and destination airport data into a single\n//   dataframe, converting to RDD, and finding unique values\nval airports \u003d airportOrigins.union(airportDests).toDF(\"AirportID\", \"AirportCode\").distinct()\nprintln(\"Unique airports: \" + airports.count())\nairports.show(10)",
+      "user": "anonymous",
+      "dateUpdated": "Jun 19, 2018 9:15:41 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "airportOrigins: org.apache.spark.sql.DataFrame \u003d [OriginAirportID: bigint, OriginAirport: string]\nairportDests: org.apache.spark.sql.DataFrame \u003d [DestinationAirportID: bigint, DestinationAirport: string]\nairports: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] \u003d [AirportID: bigint, AirportCode: string]\nUnique airports: 301\n+---------+-----------+\n|AirportID|AirportCode|\n+---------+-----------+\n|    10754|        BRW|\n|    11977|        GRB|\n|    12007|        GTR|\n|    12402|        ITO|\n|    10135|        ABE|\n|    15024|        STT|\n|    15370|        TUL|\n|    12278|        ICT|\n|    10792|        BUF|\n|    13024|        LMT|\n+---------+-----------+\nonly showing top 10 rows\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528945755573_-789697301",
+      "id": "20180614-130915_931733487",
+      "dateCreated": "Jun 14, 2018 1:09:15 PM",
+      "dateStarted": "Jun 19, 2018 9:15:41 PM",
+      "dateFinished": "Jun 19, 2018 9:15:54 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// Define default vertex\nval defaultAirport \u003d (\"Missing\")\n\n// Construct the graph vertices from the airport ID numbers and airport codes.\n// When converting from dataframe to RDD, each type is cast to Any, so \".toString.toLong\" is required to\n//   cast the vertex ID to a Long.\nval airportVertices: RDD[(VertexId, String)] \u003d airports.rdd.map(x \u003d\u003e (x(0).toString.toLong, x(1).toString))\nairportVertices.take(10)",
+      "user": "anonymous",
+      "dateUpdated": "Jun 19, 2018 9:16:08 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "defaultAirport: String \u003d Missing\nairportVertices: org.apache.spark.rdd.RDD[(org.apache.spark.graphx.VertexId, String)] \u003d MapPartitionsRDD[37] at map at \u003cconsole\u003e:47\nres21: Array[(org.apache.spark.graphx.VertexId, String)] \u003d Array((10754,BRW), (11977,GRB), (12007,GTR), (12402,ITO), (10135,ABE), (15024,STT), (15370,TUL), (12278,ICT), (10792,BUF), (13024,LMT))\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528951330062_-1023659691",
+      "id": "20180614-144210_1410389600",
+      "dateCreated": "Jun 14, 2018 2:42:10 PM",
+      "dateStarted": "Jun 19, 2018 9:16:08 PM",
+      "dateFinished": "Jun 19, 2018 9:16:10 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// Extract vertex IDs for airport origins and destinations and verify that\n//   each pair has many flights between them\nval flightsFromTo \u003d df.select($\"OriginAirportID\", $\"DestinationAirportID\", $\"ElapsedTime\", $\"DepartureDelay\", $\"ArrivalDelay\")\n//println(\"Total number of flights:    \" + flightsFromTo.count())\n//println(\"Number of distinct flights: \" + flightsFromTo.distinct.count())\n\nval flightEdges \u003d flightsFromTo.rdd.map(x \u003d\u003e Edge(\n    x(0).toString.toLong,    // origin airport ID\n    x(1).toString.toLong,    // arrival aiport ID\n    // Define Edge property - (ElapsedTime, DepartureDelay, ArrivalDelay)\n    (x(2).toString.toInt, x(3).toString.toInt, x(4).toString.toInt)\n))\nflightEdges.take(10)\n\n// Now create the airport-flights graph\nval flightGraph \u003d Graph(airportVertices, flightEdges, defaultAirport)\nflightGraph.persist()   // we will be performing multiple queries, so persist in memory",
+      "user": "anonymous",
+      "dateUpdated": "Jun 19, 2018 9:16:36 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "flightsFromTo: org.apache.spark.sql.DataFrame \u003d [OriginAirportID: bigint, DestinationAirportID: bigint ... 3 more fields]\nflightEdges: org.apache.spark.rdd.RDD[org.apache.spark.graphx.Edge[(Int, Int, Int)]] \u003d MapPartitionsRDD[41] at map at \u003cconsole\u003e:42\nres27: Array[org.apache.spark.graphx.Edge[(Int, Int, Int)]] \u003d Array(Edge(12478,12892,(385,14,13)), Edge(12478,12892,(385,0,1)), Edge(12478,12892,(385,65,59)), Edge(12478,12892,(385,110,110)), Edge(12478,12892,(385,17,0)), Edge(12478,12892,(385,10,0)), Edge(12478,12892,(385,23,0)), Edge(12478,12892,(385,0,0)), Edge(12478,12892,(385,29,20)), Edge(12478,12892,(385,15,79)))\nflightGraph: org.apache.spark.graphx.Graph[String,(Int, Int, Int)] \u003d org.apache.spark.graphx.impl.GraphImpl@6a3b9c4\nres30: org.apache.spark.graphx.Graph[String,(Int, Int, Int)] \u003d org.apache.spark.graphx.impl.GraphImpl@6a3b9c4\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1529016586107_-650224485",
+      "id": "20180615-084946_67038323",
+      "dateCreated": "Jun 15, 2018 8:49:46 AM",
+      "dateStarted": "Jun 19, 2018 9:16:36 PM",
+      "dateFinished": "Jun 19, 2018 9:16:38 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// Q1 - Find the top 10 busiest airports.  Define the busiest airport to be the one with\n//   the most in-degrees plus out-degrees, i.e. total number of flights in and out.\nval airportDegree \u003d flightGraph.inDegrees.join(flightGraph.outDegrees)\n    .map(x \u003d\u003e (x._1, x._2._1 + x._2._2))    // sum inDeg + outDeg for each vertex\n    .join(airportVertices)                  // join with vertices RDD so vertex names can be attached\n    .sortBy(_._2._1, ascending\u003dfalse)       // sort descending order\n\n// display results and print to file\nairportDegree.take(10).map(_._2).foreach(println(_))\nval pw \u003d new PrintWriter(new File(path + \"partB_1.csv\"))\npw.write(\"NumberFlights,AirportCode\\n\")\nairportDegree.take(10).map(_._2).foreach(pw.println)\npw.close",
+      "user": "anonymous",
+      "dateUpdated": "Jun 19, 2018 9:16:50 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "airportDegree: org.apache.spark.rdd.RDD[(org.apache.spark.graphx.VertexId, (Int, String))] \u003d MapPartitionsRDD[73] at sortBy at \u003cconsole\u003e:58\n(56500,ATL)\n(45352,DFW)\n(35926,LAX)\n(35655,ORD)\n(34361,DEN)\n(26697,IAH)\n(26180,PHX)\n(26125,SFO)\n(21646,LAS)\n(18685,CLT)\npw: java.io.PrintWriter \u003d java.io.PrintWriter@1d2fc9cf\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528953724258_1696163101",
+      "id": "20180614-152204_1906396394",
+      "dateCreated": "Jun 14, 2018 3:22:04 PM",
+      "dateStarted": "Jun 19, 2018 9:16:50 PM",
+      "dateFinished": "Jun 19, 2018 9:17:01 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val airportDegree \u003d flightGraph.inDegrees.join(flightGraph.outDegrees)\n    .map(x \u003d\u003e (x._1, x._2._1 + x._2._2))    // sum inDeg + outDeg for each vertex\nairportDegree.take(10)",
+      "user": "anonymous",
+      "dateUpdated": "Jun 19, 2018 9:18:49 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "airportDegree: org.apache.spark.rdd.RDD[(org.apache.spark.graphx.VertexId, Int)] \u003d MapPartitionsRDD[77] at map at \u003cconsole\u003e:54\nres39: Array[(org.apache.spark.graphx.VertexId, Int)] \u003d Array((10800,3361), (15401,178), (12402,1031), (11002,179), (12003,295), (11603,830), (11203,170), (11003,791), (13204,17563), (12206,677))\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1529407100248_-1370267087",
+      "id": "20180619-211820_1682564568",
+      "dateCreated": "Jun 19, 2018 9:18:20 PM",
+      "dateStarted": "Jun 19, 2018 9:18:49 PM",
+      "dateFinished": "Jun 19, 2018 9:18:50 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// Q2 - The top 10 routes based on actual time in air\n\n// Actual time in air \u003d  Elapsed Time - DepartuareDelay + ArrivalDelay\nval actualTime \u003d flightGraph.mapEdges(e \u003d\u003e e.attr._1 - e.attr._2 + e.attr._3)  // calculate actual time for each edge\n    .groupEdges(_+_)                                    // aggregate time for all directed edges between two vertices\n    .triplets.map(t \u003d\u003e (t.srcAttr, t.dstAttr, t.attr))  // extract vertex and total actual time information\n    .sortBy(_._3, ascending\u003dfalse)                      // sort in descending order\n\n// display results and print to file\nactualTime.take(10).foreach(println(_))\nval pw \u003d new PrintWriter(new File(path + \"partB_2.csv\"))\npw.write(\"OriginAirport,DestinationAirport,ActualTimeInAir\\n\")\nactualTime.take(10).foreach(pw.println)\npw.close",
+      "user": "anonymous",
+      "dateUpdated": "Jun 18, 2018 9:48:35 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "actualTime: org.apache.spark.rdd.RDD[(String, String, Int)] \u003d MapPartitionsRDD[166] at sortBy at \u003cconsole\u003e:129\n(JFK,LAX,332482)\n(LAX,JFK,271583)\n(JFK,SFO,266479)\n(SFO,JFK,214890)\n(ORD,SFO,153282)\n(ORD,LAX,153198)\n(EWR,LAX,145482)\n(SFO,ORD,144292)\n(EWR,SFO,144139)\n(LAX,ORD,143134)\npw: java.io.PrintWriter \u003d java.io.PrintWriter@17c210bd\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528977761017_1810340237",
+      "id": "20180614-220241_66030979",
+      "dateCreated": "Jun 14, 2018 10:02:41 PM",
+      "dateStarted": "Jun 17, 2018 10:26:02 PM",
+      "dateFinished": "Jun 17, 2018 10:26:05 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// Q3 - The 10 worst routes in terms of average arrival delays\n\n// get arrival delay from edge attribute and insert edge counter\nval arrivalDelay \u003d flightGraph.mapEdges(e \u003d\u003e (e.attr._3, 1))\n    .groupEdges((e1, e2) \u003d\u003e (e1._1 + e2._1, e1._2 + e2._2)) // aggregate arrival delays for each route and count like edges\n    .mapEdges(e \u003d\u003e e.attr._1.toFloat / e.attr._2)           // average \u003d total arrival delay / number of edges per route\n    .triplets.map(t \u003d\u003e (t.srcAttr, t.dstAttr, t.attr))      // extract vertex and average arrival delay information\n    .sortBy(_._3, ascending\u003dfalse)                          // sort in descending order\n\n// display results and print to file    \narrivalDelay.take(10).foreach(println(_))\nval pw \u003d new PrintWriter(new File(path + \"partB_3.csv\"))\npw.write(\"OriginAirport,DestinationAirport,AverageArrivalDelay\\n\")\narrivalDelay.take(10).foreach(pw.println)\npw.close",
+      "user": "anonymous",
+      "dateUpdated": "Jun 18, 2018 9:51:03 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "arrivalDelay: org.apache.spark.rdd.RDD[(String, String, Float)] \u003d MapPartitionsRDD[183] at sortBy at \u003cconsole\u003e:130\n(HSV,ATL,322.0)\n(JFK,JAC,302.0)\n(JAC,JFK,299.0)\n(GSO,ATL,295.0)\n(SYR,BTV,244.0)\n(MEM,MCO,236.0)\n(MCO,MEM,233.0)\n(ATL,ABQ,227.5)\n(EWR,SLC,217.0)\n(ATL,SLC,211.0)\npw: java.io.PrintWriter \u003d java.io.PrintWriter@40d3f13d\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528977824577_-1760252149",
+      "id": "20180614-220344_1305461409",
+      "dateCreated": "Jun 14, 2018 10:03:44 PM",
+      "dateStarted": "Jun 17, 2018 10:27:56 PM",
+      "dateFinished": "Jun 17, 2018 10:27:59 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// This code is based on GraphX documentation code and StackExchange code snippet:\n//   https://spark.apache.org/docs/latest/graphx-programming-guide.html#neighborhood-aggregation\n//   https://stackoverflow.com/questions/35648558/how-to-sum-edge-weights-with-graphx\n// with some modifications for the specific problem\nval departureDelays: RDD[(VertexId, (Int, Int))] \u003d \n    flightGraph.mapEdges(e \u003d\u003e e.attr._2)          // collapse edge attribute to departure delay\n    .aggregateMessages[(Int, Int)](\n        triplet \u003d\u003e { // Map Function\n            triplet.sendToSrc((1, triplet.attr))  // send edge counter and departure delay to source\n        }, // Reduce Function\n        (a, b) \u003d\u003e (a._1 + b._1, a._2 + b._2),     // count edges and aggregate departure delays\n        TripletFields.EdgeOnly\n    )\n\n// Divide total departure delays by number of edges (flights)\nval avgDepartureDelays: RDD[(VertexId, Double)] \u003d\n    departureDelays.mapValues( { case (count, totalDelay) \u003d\u003e totalDelay.toFloat / count }\n    )//.join(airportVertices)                  // join with vertices RDD so vertex names can be attached\n//    .sortBy(_._2._1, ascending\u003dfalse)       // sort descending order\n        \n// display results and print to file\navgDepartureDelays.take(10).foreach(println(_))\nval pw \u003d new PrintWriter(new File(path + \"partB_4.csv\"))\npw.write(\"OriginAirport,AverageDepartureDelay\\n\")\navgDepartureDelays.take(10).foreach(pw.println)\npw.close",
+      "user": "anonymous",
+      "dateUpdated": "Jun 19, 2018 9:24:44 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "departureDelays: org.apache.spark.rdd.RDD[(org.apache.spark.graphx.VertexId, (Int, Int))] \u003d VertexRDDImpl[89] at RDD at VertexRDD.scala:57\navgDepartureDelays: org.apache.spark.rdd.RDD[(org.apache.spark.graphx.VertexId, Double)] \u003d MapPartitionsRDD[90] at mapValues at \u003cconsole\u003e:58\n(10800,13.341666221618652)\n(15401,4.056180000305176)\n(12402,3.541747570037842)\n(11002,17.224720001220703)\n(12003,8.520270347595215)\n(11603,11.471014022827148)\n(11203,25.952381134033203)\n(11003,28.305343627929688)\n(13204,22.311965942382812)\n(12206,12.002967834472656)\npw: java.io.PrintWriter \u003d java.io.PrintWriter@41e9a949\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1529241037644_-989327427",
+      "id": "20180617-231037_1482307325",
+      "dateCreated": "Jun 17, 2018 11:10:37 PM",
+      "dateStarted": "Jun 19, 2018 9:24:44 PM",
+      "dateFinished": "Jun 19, 2018 9:24:47 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// Utilising the flights data frame loaded in Part B - sort data\nval sortedDF \u003d df.orderBy(\"FlightNum\", \"ScheduledDepartureTime\")\nprintln(\"Sorded DF size \u003d \" + sortedDF.count())\n\n// Split data into train-test dataframes. Filtering code adapted from\n//  https://stackoverflow.com/questions/46991818/reduce-size-of-spark-dataframe-by-selecting-only-every-n-th-element-with-scala\nval n \u003d 10\nval testDF \u003d sortedDF.withColumn(\"index\", row_number().  // add an index column\n    over(Window.orderBy(monotonically_increasing_id))).\n    filter($\"index\" % n \u003d\u003d\u003d 0).       // filter modulo n to select only those rows\n    drop(\"index\")                     // now drop index column again\nprintln(\"Test DF size \u003d \" + testDF.count())\n\nval trainDF \u003d sortedDF.except(testDF) // training data is the remainder\nprintln(\"Train DF size \u003d \" + trainDF.count)\n",
+      "user": "anonymous",
+      "dateUpdated": "Jun 18, 2018 6:40:45 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import sqlContext.implicits._\nimport org.apache.spark.sql.expressions._\nsortedDF: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] \u003d [DayOfMonth: int, DayOfWeek: int ... 15 more fields]\nSorded DF size \u003d 439620\nn: Int \u003d 10\ntestDF: org.apache.spark.sql.DataFrame \u003d [DayOfMonth: int, DayOfWeek: int ... 15 more fields]\nTest DF size \u003d 43962\ntrainDF: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] \u003d [DayOfMonth: int, DayOfWeek: int ... 15 more fields]\nTrain DF size \u003d 395658\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1529287260283_-1434427922",
+      "id": "20180618-120100_2127985892",
+      "dateCreated": "Jun 18, 2018 12:01:00 PM",
+      "dateStarted": "Jun 18, 2018 5:17:01 PM",
+      "dateFinished": "Jun 18, 2018 5:17:41 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// Assessment 4 - Part C\n\nimport org.apache.spark.sql.expressions._\nimport org.apache.spark.sql.types.{StructType, StructField, StringType, IntegerType, LongType}\nimport org.apache.spark.rdd.RDD\nimport org.apache.spark.ml.regression.LinearRegression\nimport org.apache.spark.ml.feature.VectorAssembler\nimport org.apache.spark.ml.linalg.Vectors\nimport org.apache.spark.ml.feature.StringIndexer\nimport org.apache.spark.ml.Pipeline\n\n// adjusting the log level to only errors (ignore warnings)\nsc.setLogLevel(\"error\")\n\nval customSchema \u003d StructType(Array(\n    StructField(\"DayOfMonth\", IntegerType, true),\n    StructField(\"DayOfWeek\", IntegerType, true),\n    StructField(\"CarrierCode\", StringType, true),\n    StructField(\"TailNum\", StringType, true),\n    StructField(\"FlightNum\", StringType, true),\n    StructField(\"OriginAirportID\", LongType, true),\n    StructField(\"OriginAirport\", StringType, true),\n    StructField(\"DestinationAirportID\", LongType, true),\n    StructField(\"DestinationAirport\", StringType, true),\n    StructField(\"ScheduledDepartureTime\", StringType, true),\n    StructField(\"ActualDepartureTime\", StringType, true),\n    StructField(\"DepartureDelay\", IntegerType, true),\n    StructField(\"ScheduledArrivalTime\", StringType, true),\n    StructField(\"ActualArrivalTime\", StringType, true),\n    StructField(\"ArrivalDelay\", StringType, true),\n    StructField(\"ElapsedTime\", IntegerType, true),\n    StructField(\"Distance\", IntegerType, true)\n))\n    \nval df \u003d spark.read.schema(customSchema).csv(\"/srv/home/rgai0001/ass4/test.csv.bz2\")\ndf.printSchema()\n\n/************************/\n// Q1 - Sort the flights based on their flight number and scheduled departure time\nval sortedDF \u003d df.orderBy(\"FlightNum\", \"ScheduledDepartureTime\")\n\n// Transform categorical columns to indices for regression\n// Code snippet from\n//  http://apache-spark-user-list.1001560.n3.nabble.com/StringIndexer-on-several-columns-in-a-DataFrame-with-Scala-td29842.html\nval categoricalCol \u003d Array(\"CarrierCode\", \"FlightNum\", \"OriginAirportID\",\n    \"DestinationAirportID\", \"ScheduledDepartureTime\")\nval indexers \u003d categoricalCol.map { colName \u003d\u003e\n  new StringIndexer().setInputCol(colName).setOutputCol(colName + \"_indexed\")\n}\n\n// Apply indexers to training data\nval pipeline \u003d new Pipeline().setStages(indexers)      \nval indexedDF \u003d pipeline.fit(sortedDF).transform(sortedDF)\n// we will be accessing the dataframe multiple times so persist in memory\nindexedDF.persist()\n\n// Assemble the feature vector based on selected attributes\nval assembler \u003d new VectorAssembler().\n    setInputCols(Array(\"DayOfMonth\", \"DayOfWeek\", \"CarrierCode_indexed\",\n    \"FlightNum_indexed\", \"OriginAirportID_indexed\",\n    \"DestinationAirportID_indexed\", \"ScheduledDepartureTime_indexed\")).\n    setOutputCol(\"features\")\n\n// Perform transform to insert feature vector and add a label column\nval finalDF \u003d assembler.transform(indexedDF).\n    withColumn(\"label\", indexedDF(\"ArrivalDelay\") - indexedDF(\"DepartureDelay\")).\n    select(\"label\", \"features\")\nfinalDF.persist()\nfinalDF.take(10).foreach(println)\n\n/**************************/\n// Q2 - Split into train-test dataframes\n// We now have a regression-ready dataset. Filtering code for splitting adapted from\n//  https://stackoverflow.com/questions/46991818/reduce-size-of-spark-dataframe-by-selecting-only-every-n-th-element-with-scala\nval n \u003d 10\nval testDF \u003d finalDF.withColumn(\"index\", row_number().  // add an index column\n    over(Window.orderBy(monotonically_increasing_id))).\n    filter($\"index\" % n \u003d\u003d\u003d 0).       // filter modulo n to select only those rows\n    drop(\"index\")                     // now drop index column again\n    \nval trainDF \u003d finalDF.except(testDF) // training data is the remainder\nprintln(\"Total DF size \u003d \" + finalDF.count)\nprintln(\"Train DF size \u003d \" + trainDF.count)\nprintln(\"Test DF size \u003d \" + testDF.count)",
+      "user": "anonymous",
+      "dateUpdated": "Jun 19, 2018 10:09:48 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "INCOMPLETE",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import sqlContext.implicits._\nimport org.apache.spark.sql.expressions._\nimport org.apache.spark.sql.types.{StructType, StructField, StringType, IntegerType, LongType}\nimport org.apache.spark.rdd.RDD\nimport org.apache.spark.mllib.util.MLUtils\nimport org.apache.spark.ml.regression.LinearRegression\nimport org.apache.spark.ml.feature.VectorAssembler\nimport org.apache.spark.ml.linalg.Vectors\nimport org.apache.spark.ml.feature.StringIndexer\nimport org.apache.spark.ml.Pipeline\npath: String \u003d /srv/home/rgai0001/ass4/28838750_\ncustomSchema: org.apache.spark.sql.types.StructType \u003d StructType(StructField(DayOfMonth,IntegerType,true), StructField(DayOfWeek,IntegerType,true), StructField(CarrierCode,StringType,true), StructField(TailNum,StringType,true), StructField(FlightNum,StringType,true), StructField(OriginAirportID,LongType,true), StructField(OriginAirport,StringType,true), StructField(DestinationAirportID,LongType,true), StructField(DestinationAirport,StringType,true), StructField(ScheduledDepartureTime,StringType,true), StructField(ActualDepartureTime,StringType,true), StructField(DepartureDelay,IntegerType,true), StructField(ScheduledArrivalTime,StringType,true), StructField(ActualArrivalTime,StringType,true), StructField(ArrivalDelay,StringType,true), StructField(ElapsedTime,IntegerType,true), StructFie...df: org.apache.spark.sql.DataFrame \u003d [DayOfMonth: int, DayOfWeek: int ... 15 more fields]\nroot\n |-- DayOfMonth: integer (nullable \u003d true)\n |-- DayOfWeek: integer (nullable \u003d true)\n |-- CarrierCode: string (nullable \u003d true)\n |-- TailNum: string (nullable \u003d true)\n |-- FlightNum: string (nullable \u003d true)\n |-- OriginAirportID: long (nullable \u003d true)\n |-- OriginAirport: string (nullable \u003d true)\n |-- DestinationAirportID: long (nullable \u003d true)\n |-- DestinationAirport: string (nullable \u003d true)\n |-- ScheduledDepartureTime: string (nullable \u003d true)\n |-- ActualDepartureTime: string (nullable \u003d true)\n |-- DepartureDelay: integer (nullable \u003d true)\n |-- ScheduledArrivalTime: string (nullable \u003d true)\n |-- ActualArrivalTime: string (nullable \u003d true)\n |-- ArrivalDelay: string (nullable \u003d true)\n |-- ElapsedTime: integer (nullable \u003d true)\n |-- Distance: integer (nullable \u003d true)\n\nsortedDF: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] \u003d [DayOfMonth: int, DayOfWeek: int ... 15 more fields]\ncategoricalCol: Array[String] \u003d Array(CarrierCode, FlightNum, OriginAirportID, DestinationAirportID, ScheduledDepartureTime)\nindexers: Array[org.apache.spark.ml.feature.StringIndexer] \u003d Array(strIdx_6ab1f1c453f7, strIdx_5606f1b9cafa, strIdx_ae19e79028a9, strIdx_66eae115193a, strIdx_f553f06430bb)\npipeline: org.apache.spark.ml.Pipeline \u003d pipeline_52bc58286b52\nindexedDF: org.apache.spark.sql.DataFrame \u003d [DayOfMonth: int, DayOfWeek: int ... 20 more fields]\nres19: indexedDF.type \u003d [DayOfMonth: int, DayOfWeek: int ... 20 more fields]\nassembler: org.apache.spark.ml.feature.VectorAssembler \u003d vecAssembler_a9e98fe67591\nfinalDF: org.apache.spark.sql.DataFrame \u003d [label: double, features: vector]\nres24: finalDF.type \u003d [label: double, features: vector]\n[0.0,[1.0,3.0,8.0,175.0,18.0,23.0,422.0]]\n[-1.0,[4.0,6.0,8.0,175.0,18.0,23.0,422.0]]\n[35.0,[5.0,7.0,8.0,175.0,18.0,23.0,422.0]]\n[32.0,[2.0,4.0,8.0,175.0,18.0,23.0,422.0]]\n[15.0,[9.0,4.0,8.0,175.0,18.0,23.0,655.0]]\n[14.0,[8.0,3.0,8.0,175.0,18.0,23.0,655.0]]\n[-1.0,[10.0,5.0,8.0,175.0,18.0,23.0,655.0]]\n[49.0,[11.0,6.0,8.0,175.0,18.0,23.0,655.0]]\n[0.0,[13.0,1.0,8.0,175.0,18.0,23.0,655.0]]\n[8.0,[16.0,4.0,8.0,175.0,18.0,23.0,655.0]]\nn: Int \u003d 10\ntestDF: org.apache.spark.sql.DataFrame \u003d [label: double, features: vector]\ntrainDF: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] \u003d [label: double, features: vector]\n"
+          },
+          {
+            "type": "TEXT",
+            "data": "Incomplete expression"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1529306112726_-1666591181",
+      "id": "20180618-171512_911252578",
+      "dateCreated": "Jun 18, 2018 5:15:12 PM",
+      "dateStarted": "Jun 19, 2018 8:53:37 AM",
+      "dateFinished": "Jun 19, 2018 8:55:03 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "/**************************/\n// Q3 - Train a linear regression to model the training dataset and predict\n// the overall delay. Code adapted from\n//  https://spark.apache.org/docs/latest/ml-classification-regression.html#linear-regression\nval lr \u003d new LinearRegression().\n    setMaxIter(10).\n    setRegParam(0).   // these parameters need to be zero to undertake \"normal\" solver\n    setElasticNetParam(0).  // normal solver is required for p-values\n    setFeaturesCol(\"features\").\n    setLabelCol(\"label\").\n    setPredictionCol(\"prediction\")\n// For a discussion of solvers and requirements for extracting p-values, see\n//  https://stackoverflow.com/questions/46696378/spark-linearregressionsummary-normal-summary\n\n// Fit the model\nval lrModel \u003d lr.fit(trainDF)\n\n// Print the coefficients and intercept for linear regression\nprintln(s\"Coefficients: ${lrModel.coefficients}\")\nprintln(s\"Intercept: ${lrModel.intercept}\")\n\n/**************************/\n// Q4 - Calculate and report train and test error (RMSE)\nval lrPrediction \u003d lrModel.transform(testDF)\n\n// Calculate residuals of model prediction vs data\nval residuals \u003d lrPrediction.select(\"label\", \"prediction\").\n    // calculate difference of data label and prediction\n    withColumn(\"diff\", lrPrediction(\"label\") - lrPrediction(\"prediction\")).\n    select(\"diff\").rdd.map(r \u003d\u003e r(0).toString.toDouble).collect()  // extract value from row\nval n \u003d residuals.length\n\n// Calculate the root mean square error of the model\nval testRMSE \u003d math.sqrt(\n    residuals.map( x \u003d\u003e math.pow(x, 2) ).reduceLeft(_+_) / n\n)\n\n// Print model error results\nval trainingSummary \u003d lrModel.summary\nprintln(s\"Training RMSE \u003d ${trainingSummary.rootMeanSquaredError}\")\nprintln(s\"Training r2 \u003d ${trainingSummary.r2}\")\nprintln(\"Test RMSE \u003d \" + testRMSE)\n\n/**************************/\n// Q5 - Identify the most and least contributing attributes in the training set.\n// Create a model summary\nprintln(\"p-values: \")\ntrainingSummary.pValues\nprintln(\"t-statistics: \")\ntrainingSummary.tValues\n// See a discussion of these values in the assessment report",
+      "user": "anonymous",
+      "dateUpdated": "Jun 19, 2018 9:02:01 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "lr: org.apache.spark.ml.regression.LinearRegression \u003d linReg_37aebf5e082b\nlrModel: org.apache.spark.ml.regression.LinearRegressionModel \u003d linReg_37aebf5e082b\nCoefficients: [-0.04027672904347547,0.012779972639228488,0.30823913054898494,4.908247440947317E-4,0.008952971643635253,6.484692267252148E-4,-0.001220993048124057]\nIntercept: -0.9771726681847341\nlrPrediction: org.apache.spark.sql.DataFrame \u003d [label: double, features: vector ... 1 more field]\nresiduals: Array[Double] \u003d Array(7.642355232436113, 20.178732682640522, 2.1222329535111824, -20.396383109092902, 1.9955410198284143, 1.1728503717934298, 52.01807618872836, -1.644993195158821, -1.2186027705713989, -2.5164728618945427, -2.062585680902874, -3.0803470685031997, 0.9457623597720113, 1.537133322784915, -2.409626226542159, -1.95573904555049, -1.5913116730334211, -6.413596566687517, 0.04029061430415137, 0.4322147432254674, -5.345996568245311, 1.0734243170802522, 1.472317985263427, 5.594122735744825, -10.068946648142353, -10.049974080106132, 3.3419500488151836, 18.795837229806853, -5.755348115250161, 1.1604329891745981, 0.3519570847621869, -2.6593646209366892, -2.2949372484196195, -7.84105006742795, 0.9889766830282949, -0.6465959444546359, -4.298303955113041, 0.1830799822828746, ...n: Int \u003d 43962\ntestRMSE: Double \u003d 738.9907458886242\ntrainingSummary: org.apache.spark.ml.regression.LinearRegressionTrainingSummary \u003d org.apache.spark.ml.regression.LinearRegressionTrainingSummary@35257e97\nTraining RMSE \u003d 11.193164505095746\nTraining r2 \u003d 0.01306784813291384\nTest RMSE \u003d 738.9907458886242\np-values: \nres81: Array[Double] \u003d Array(0.0, 0.17229346879720597, 0.0, 0.0, 0.0, 0.11799713130056455, 0.0, 0.0)\nt-statistics: \nres83: Array[Double] \u003d Array(-20.050089803860924, 1.3648738813808945, 54.33540404745644, 39.35176325552377, 21.552454463309, 1.563239249153961, -14.98806135910698, -15.131999088242166)\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1529293541321_1434438237",
+      "id": "20180618-134541_203843092",
+      "dateCreated": "Jun 18, 2018 1:45:41 PM",
+      "dateStarted": "Jun 19, 2018 9:02:01 AM",
+      "dateFinished": "Jun 19, 2018 9:02:48 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "user": "anonymous",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1529327253428_988499461",
+      "id": "20180618-230733_1294409747",
+      "dateCreated": "Jun 18, 2018 11:07:33 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// Transform categorical columns to indices for regression\n// Code snippet from\n//  http://apache-spark-user-list.1001560.n3.nabble.com/StringIndexer-on-several-columns-in-a-DataFrame-with-Scala-td29842.html\nval categoricalCol \u003d Array(\"CarrierCode\", \"FlightNum\", \"ScheduledDepartureTime\")\nval indexers \u003d categoricalCol.map { colName \u003d\u003e\n  new StringIndexer().setInputCol(colName).setOutputCol(colName + \"_indexed\")\n}\n\n// Apply indexers to training data\nval pipeline \u003d new Pipeline().setStages(indexers)      \nval indexedTraining \u003d pipeline.fit(trainDF).transform(trainDF)\nindexedTraining.show()",
+      "user": "anonymous",
+      "dateUpdated": "Jun 18, 2018 8:44:31 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.ml.Pipeline\ncategoricalCol: Array[String] \u003d Array(CarrierCode, FlightNum, ScheduledDepartureTime)\nindexers: Array[org.apache.spark.ml.feature.StringIndexer] \u003d Array(strIdx_e4a169376a24, strIdx_eaed17f9bacb, strIdx_572f7f445e35)\npipeline: org.apache.spark.ml.Pipeline \u003d pipeline_569197c237ad\nindexedTraining: org.apache.spark.sql.DataFrame \u003d [DayOfMonth: int, DayOfWeek: int ... 18 more fields]\n+----------+---------+-----------+-------+---------+---------------+-------------+--------------------+------------------+----------------------+-------------------+--------------+--------------------+-----------------+------------+-----------+--------+-------------------+-----------------+------------------------------+\n|DayOfMonth|DayOfWeek|CarrierCode|TailNum|FlightNum|OriginAirportID|OriginAirport|DestinationAirportID|DestinationAirport|ScheduledDepartureTime|ActualDepartureTime|DepartureDelay|ScheduledArrivalTime|ActualArrivalTime|ArrivalDelay|ElapsedTime|Distance|CarrierCode_indexed|FlightNum_indexed|ScheduledDepartureTime_indexed|\n+----------+---------+-----------+-------+---------+---------------+-------------+--------------------+------------------+----------------------+-------------------+--------------+--------------------+-----------------+------------+-----------+--------+-------------------+-----------------+------------------------------+\n|         1|        3|         AA| N3FSAA|     2215|          11298|          DFW|               10721|               BOS|                  1730|               1726|             0|                2155|             2132|           0|        205|    1562|                4.0|           4001.0|                          13.0|\n|         1|        3|         AA| N3JBAA|      171|          12889|          LAS|               13930|               ORD|                  1540|               1646|            66|                2110|             2246|          96|        210|    1514|                4.0|           2031.0|                         166.0|\n|         1|        3|         AA| N475AA|     2491|          11298|          DFW|               12896|               LBB|                  2040|               2129|            49|                2145|             2234|          49|         65|     282|                4.0|           3555.0|                         180.0|\n|         1|        3|         AA| N542AA|     2311|          11298|          DFW|               13930|               ORD|                  1315|               1415|            60|                1530|             1627|          57|        135|     802|                4.0|           1127.0|                          36.0|\n|         1|        3|         AA| N552AA|     1277|          11298|          DFW|               10821|               BWI|                   935|               1043|            68|                1320|             1414|          54|        165|    1217|                4.0|           1014.0|                         153.0|\n|         1|        3|         AS| N512AS|      875|          14747|          SEA|               12982|               LIH|                   850|                857|             7|                1325|             1303|           0|        395|    2701|                9.0|           3112.0|                          34.0|\n|         1|        3|         B6| N184JB|     2602|          12478|          JFK|               10792|               BUF|                  1040|               1036|             0|                1159|             1206|           7|         79|     301|                8.0|           1930.0|                         101.0|\n|         1|        3|         B6| N307JB|      741|          10721|          BOS|               14986|               SRQ|                  1005|               1001|             0|                1326|             1332|           6|        201|    1220|                8.0|            212.0|                          49.0|\n|         1|        3|         B6| N705JB|     1052|          14843|          SJU|               15304|               TPA|                  1340|               1337|             0|                1550|             1538|           0|        190|    1237|                8.0|           1066.0|                         104.0|\n|         1|        3|         B6| N794JB|     2170|          11697|          FLL|               10721|               BOS|                  2000|               2101|            61|                2302|             2344|          42|        182|    1237|                8.0|           2502.0|                          81.0|\n|         1|        3|         DL| N323NB|      548|          14908|          SNA|               14869|               SLC|                  1633|               1627|             0|                1919|             1909|           0|        106|     588|                1.0|           1322.0|                         628.0|\n|         1|        3|         DL| N353NW|      386|          11618|          EWR|               14869|               SLC|                  1100|               1059|             0|                1404|             1419|          15|        304|    1969|                1.0|             11.0|                           6.0|\n|         1|        3|         DL| N362NW|     1547|          12953|          LGA|               10397|               ATL|                   659|                654|             0|                 941|              921|           0|        162|     762|                1.0|            830.0|                         247.0|\n|         1|        3|         DL| N551NW|     1108|          10397|          ATL|               13487|               MSP|                  1745|               1741|             0|                1926|             1909|           0|        161|     907|                1.0|           1700.0|                          79.0|\n|         1|        3|         DL| N727TW|     1542|          14747|          SEA|               12478|               JFK|                  2259|               2312|            13|                 659|              706|           7|        300|    2422|                1.0|            546.0|                         669.0|\n|         1|        3|         DL| N908DL|      478|          10397|          ATL|               12478|               JFK|                  1505|               1506|             1|                1721|             1720|           0|        136|     760|                1.0|             31.0|                         137.0|\n|         1|        3|         DL| N948DN|      674|          10397|          ATL|               11292|               DEN|                  1901|               1917|            16|                2030|             2036|           6|        209|    1199|                1.0|             29.0|                         961.0|\n|         1|        3|         DL| N960DN|     1422|          11292|          DEN|               10397|               ATL|                    59|                 50|             0|                 537|              521|           0|        158|    1199|                1.0|           1996.0|                         980.0|\n|         1|        3|         EV| N724EV|     5193|          12953|          LGA|               10792|               BUF|                  1105|               1056|             0|                1241|             1209|           0|         96|     292|                2.0|           2543.0|                          97.0|\n|         1|        3|         EV| N820AS|     5699|          12264|          IAD|               15096|               SYR|                  1231|               1304|            33|                1349|             1404|          15|         78|     296|                2.0|           4221.0|                         461.0|\n+----------+---------+-----------+-------+---------+---------------+-------------+--------------------+------------------+----------------------+-------------------+--------------+--------------------+-----------------+------------+-----------+--------+-------------------+-----------------+------------------------------+\nonly showing top 20 rows\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1529314689613_-864281776",
+      "id": "20180618-193809_124983470",
+      "dateCreated": "Jun 18, 2018 7:38:09 PM",
+      "dateStarted": "Jun 18, 2018 7:49:11 PM",
+      "dateFinished": "Jun 18, 2018 7:50:12 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// Assemble the feature vector based on selected attributes\nval assembler \u003d new VectorAssembler().\n    setInputCols(Array(\"DayOfMonth\", \"DayOfWeek\", \"CarrierCode_indexed\",\n    \"FlightNum_indexed\", \"OriginAirportID\", \"DestinationAirportID\",\n    \"ScheduledDepartureTime_indexed\")).\n    setOutputCol(\"features\")\n\nval training \u003d assembler.transform(indexedTraining).\n    withColumn(\"label\", indexedTraining(\"ArrivalDelay\") - indexedTraining(\"DepartureDelay\")).\n    select(\"label\", \"features\")\ntraining.take(10).foreach(println)",
+      "user": "anonymous",
+      "dateUpdated": "Jun 18, 2018 8:15:10 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "assembler: org.apache.spark.ml.feature.VectorAssembler \u003d vecAssembler_13d0a520a688\ntraining: org.apache.spark.sql.DataFrame \u003d [label: double, features: vector]\n+-----+--------------------+\n|label|            features|\n+-----+--------------------+\n|  0.0|[1.0,3.0,4.0,4001...|\n| 30.0|[1.0,3.0,4.0,2031...|\n|  0.0|[1.0,3.0,4.0,3555...|\n| -3.0|[1.0,3.0,4.0,1127...|\n|-14.0|[1.0,3.0,4.0,1014...|\n| -7.0|[1.0,3.0,9.0,3112...|\n|  7.0|[1.0,3.0,8.0,1930...|\n|  6.0|[1.0,3.0,8.0,212....|\n|  0.0|[1.0,3.0,8.0,1066...|\n|-19.0|[1.0,3.0,8.0,2502...|\n|  0.0|[1.0,3.0,1.0,1322...|\n| 15.0|[1.0,3.0,1.0,11.0...|\n|  0.0|[1.0,3.0,1.0,830....|\n|  0.0|[1.0,3.0,1.0,1700...|\n| -6.0|[1.0,3.0,1.0,546....|\n| -1.0|[1.0,3.0,1.0,31.0...|\n|-10.0|[1.0,3.0,1.0,29.0...|\n|  0.0|[1.0,3.0,1.0,1996...|\n|  0.0|[1.0,3.0,2.0,2543...|\n|-18.0|[1.0,3.0,2.0,4221...|\n+-----+--------------------+\nonly showing top 20 rows\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1529310139195_1921874201",
+      "id": "20180618-182219_1447329349",
+      "dateCreated": "Jun 18, 2018 6:22:19 PM",
+      "dateStarted": "Jun 18, 2018 8:13:09 PM",
+      "dateFinished": "Jun 18, 2018 8:13:21 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// The 10 worst airports in terms of average departure delays\n\n// This code is based on GraphX documentation code and StackExchange code snippet:\n//   https://spark.apache.org/docs/latest/graphx-programming-guide.html#neighborhood-aggregation\n//   https://stackoverflow.com/questions/35648558/how-to-sum-edge-weights-with-graphx\n// with some modifications for the specific problem\nval departureDelays: VertexRDD[(Int, Int)] \u003d \n    flightGraph.mapEdges(e \u003d\u003e e.attr._2)          // collapse edge attribute to departure delay\n    .aggregateMessages[(Int, Int)](\n        triplet \u003d\u003e { // Map Function\n            triplet.sendToSrc((1, triplet.attr))  // send edge counter and departure delay to source\n        }, // Reduce Function\n        (a, b) \u003d\u003e (a._1 + b._1, a._2 + b._2),     // count edges and aggregate departure delays\n        TripletFields.EdgeOnly\n    )\n\n// Divide total departure delays by number of edges (flights)\nval avgDepartureDelays: VertexRDD[Double] \u003d\n    departureDelays.mapValues( (id, value) \u003d\u003e\n        value match { case (count, totalDelay) \u003d\u003e totalDelay.toFloat / count }\n    ).sortBy(value \u003d\u003e value, ascending\u003dfalse)               // sort in descending order\n        \n// display results and print to file\navgDepartureDelays.take(10).foreach(println(_))\nval pw \u003d new PrintWriter(new File(path + \"partB_4.csv\"))\npw.write(\"OriginAirport,AverageDepartureDelay\\n\")\navgDepartureDelays.take(10).foreach(pw.println)\npw.close",
+      "user": "anonymous",
+      "dateUpdated": "Jun 17, 2018 11:42:14 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "departureDelays: org.apache.spark.graphx.VertexRDD[(Int, Int)] \u003d VertexRDDImpl[331] at RDD at VertexRDD.scala:57\n\u003cconsole\u003e:130: error: type mismatch;\n found   : org.apache.spark.rdd.RDD[(org.apache.spark.graphx.VertexId, Float)]\n    (which expands to)  org.apache.spark.rdd.RDD[(Long, Float)]\n required: org.apache.spark.graphx.VertexRDD[Double]\nError occurred in an application involving default arguments.\n           ).sortBy(value \u003d\u003e value, ascending\u003dfalse)               // sort in descending order\n                   ^\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528977848979_1651362321",
+      "id": "20180614-220408_1506154773",
+      "dateCreated": "Jun 14, 2018 10:04:08 PM",
+      "dateStarted": "Jun 17, 2018 11:42:14 PM",
+      "dateFinished": "Jun 17, 2018 11:42:15 PM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import scala.collection.JavaConversions._\nimport scala.collection.mutable.ListBuffer\nimport au.com.bytecode.opencsv.CSVWriter\n\nval outputFile \u003d new BufferedWriter(new FileWriter(path + \"partB_1.csv\"))\nval csvWriter \u003d new CSVWriter(outputFile)\nval csvFields \u003d Array(\"NumberOfFlights\", \"AirportCode\")\nvar listOfRecords \u003d new ListBuffer[Array[String]]()\nlistOfRecords +\u003d csvFields\nfor (i listOfRecords +\u003d airportDegree.take(10).map(_._2))\ncsvWriter.writeAll(listOfRecords.toList)\noutputFile.close()",
+      "user": "anonymous",
+      "dateUpdated": "Jun 17, 2018 10:00:36 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import scala.collection.JavaConversions._\nimport scala.collection.mutable.ListBuffer\nimport au.com.bytecode.opencsv.CSVWriter\noutputFile: java.io.BufferedWriter \u003d java.io.BufferedWriter@4f391f4\ncsvWriter: au.com.bytecode.opencsv.CSVWriter \u003d au.com.bytecode.opencsv.CSVWriter@54529bd3\ncsvFields: Array[String] \u003d Array(NumberOfFlights, AirportCode)\nlistOfRecords: scala.collection.mutable.ListBuffer[Array[String]] \u003d ListBuffer()\nres109: scala.collection.mutable.ListBuffer[Array[String]] \u003d ListBuffer(Array(NumberOfFlights, AirportCode))\n\u003cconsole\u003e:1: error: illegal start of simple pattern\nfor (i listOfRecords +\u003d airportDegree.take(10).map(_._2))\n                                     ^\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1529234696605_397636592",
+      "id": "20180617-212456_484501884",
+      "dateCreated": "Jun 17, 2018 9:24:56 PM",
+      "dateStarted": "Jun 17, 2018 10:00:36 PM",
+      "dateFinished": "Jun 17, 2018 10:00:38 PM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "user": "anonymous",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1528979178702_697869703",
+      "id": "20180614-222618_436143820",
+      "dateCreated": "Jun 14, 2018 10:26:18 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// Extract vertex IDs for airport origins and destinations and verify that\n//   each pair has many flights between them\nval flightsFromTo \u003d df.select($\"OriginAirportID\", $\"DestinationAirportID\")\nprintln(\"Total number of flights:    \" + flightsFromTo.count())\nprintln(\"Number of distinct flights: \" + flightsFromTo.distinct.count())\n\n// Check this is the same is the number of distinct flight numbers\nprintln(\"Total number of distinct flight numbers: \" + df.select($\"FlightNum\").distinct.count())\n\n// Construct graph edges from airport origins and destinations, with each\n//   edge weighted by the number of flights connecting the vertex pairs\nval flightEdges \u003d flightsFromTo\n    .map(x \u003d\u003e ((x(0).toString.toLong, x(1).toString.toLong), 1))\n    .rdd.reduceByKey(_+_)\n    .map(x \u003d\u003e Edge(x._1._1, x._1._2, x._2))\nflightEdges.take(10)",
+      "user": "anonymous",
+      "dateUpdated": "Jun 15, 2018 8:50:07 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "defaultAirport: String \u003d Missing\nflightsFromTo: org.apache.spark.sql.DataFrame \u003d [OriginAirportID: bigint, DestinationAirportID: bigint]\nTotal number of flights:    439620\nNumber of distinct flights: 4088\nTotal number of distinct flight numbers: 6251\nflightEdges: org.apache.spark.rdd.RDD[org.apache.spark.graphx.Edge[Int]] \u003d MapPartitionsRDD[988] at map at \u003cconsole\u003e:133\nres395: Array[org.apache.spark.graphx.Edge[Int]] \u003d Array(Edge(10299,10926,30), Edge(10140,12889,120), Edge(12266,10721,126), Edge(11259,12266,152), Edge(14635,11986,24), Edge(10529,12264,58), Edge(14457,14869,30), Edge(13476,14107,84), Edge(14107,14689,36), Edge(11193,12945,1))\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1528951834160_-167470271",
+      "id": "20180614-145034_1301594427",
+      "dateCreated": "Jun 14, 2018 2:50:34 PM",
+      "dateStarted": "Jun 14, 2018 9:56:43 PM",
+      "dateFinished": "Jun 14, 2018 9:56:56 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// An example from https://github.com/databricks/spark-csv\n\n// First automatically infer schema:\nimport org.apache.spark.sql.SQLContext\n\nval sqlContext \u003d new SQLContext(sc)\nval df \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .load(\"cars.csv\")\n\nval selectedData \u003d df.select(\"year\", \"model\")\nselectedData.write\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\")\n    .save(\"newcars.csv\")\n    \n// Or specificy the schema manually when reading data:\nimport org.apache.spark.sql.SQLContext\nimport org.apache.spark.sql.types.{StructType, StructField, StringType, IntegerType}\n\nval sqlContext \u003d new SQLContext(sc)\nval customSchema \u003d StructType(Array(\n    StructField(\"year\", IntegerType, true),\n    StructField(\"make\", StringType, true),\n    StructField(\"model\", StringType, true),\n    StructField(\"comment\", StringType, true),\n    StructField(\"blank\", StringType, true)))\n\nval df \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .schema(customSchema)\n    .load(\"cars.csv\")\n\nval selectedData \u003d df.select(\"year\", \"model\")\nselectedData.write\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\")\n    .save(\"newcars.csv\")\n\n// And save with compressed output:\nimport org.apache.spark.sql.SQLContext\n\nval sqlContext \u003d new SQLContext(sc)\nval df \u003d sqlContext.read\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\") // Use first line of all files as header\n    .option(\"inferSchema\", \"true\") // Automatically infer data types\n    .load(\"cars.csv\")\n\nval selectedData \u003d df.select(\"year\", \"model\")\nselectedData.write\n    .format(\"com.databricks.spark.csv\")\n    .option(\"header\", \"true\")\n    .option(\"codec\", \"org.apache.hadoop.io.compress.GzipCodec\")\n    .save(\"newcars.csv.gz\")",
+      "user": "anonymous",
+      "dateUpdated": "Jun 8, 2018 3:39:44 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1528436021174_1489431993",
+      "id": "20180608-153341_1575667916",
+      "dateCreated": "Jun 8, 2018 3:33:41 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// In Spark 2.0, the DataBricks code has been inlined. Thus the above code becomes:\nval df \u003d sqlContext.read.format(\"csv\").option(\"inferSchema\", \"true\").load(\"/srv/home/rgai0001/ass4/test.csv.bz2\")",
+      "user": "anonymous",
+      "dateUpdated": "Jun 14, 2018 12:59:51 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1528437558124_589892354",
+      "id": "20180608-155918_1379631846",
+      "dateCreated": "Jun 8, 2018 3:59:18 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "user": "anonymous",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1528944800135_2086366434",
+      "id": "20180614-125320_200033512",
+      "dateCreated": "Jun 14, 2018 12:53:20 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "assessment-4",
+  "id": "2DGFY6D6R",
+  "angularObjects": {
+    "2CY4SB1H5:shared_process": [],
+    "2CXC618EC:shared_process": [],
+    "2CYVBGAMQ:shared_process": [],
+    "2CY3Y61TM:shared_process": [],
+    "2CXRH3T8B:shared_process": [],
+    "2CXTQKGUW:shared_process": [],
+    "2CXCNM6ZT:shared_process": [],
+    "2CXZADFKB:shared_process": [],
+    "2CUZKD23K:shared_process": [],
+    "2CVM42UGQ:shared_process": [],
+    "2CVPRSQB6:shared_process": [],
+    "2CYHQDYMU:shared_process": [],
+    "2CVV5NFCM:shared_process": [],
+    "2CW23H68H:shared_process": [],
+    "2CY8N5QUM:shared_process": [],
+    "2CVTBZ9KW:shared_process": [],
+    "2CWGDUPZW:shared_process": [],
+    "2CVKDDERZ:shared_process": [],
+    "2CYGMRJ4Q:shared_process": []
+  },
+  "config": {},
+  "info": {}
+}
